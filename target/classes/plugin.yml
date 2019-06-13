@@ -1,0 +1,92 @@
+name: CSMinecraft
+version: 1.0-SNAPSHOT
+main: io.github.keheck.csminecraft.CSMinecraft
+authors: [Keheck]
+soft-depend: [Multiverse-Core]
+permissions:
+  CSMinecraft.player:
+    description: allows a player to use the basic CSMinecraft functionalities
+    default: true
+  CSMinecraft.tester:
+      description: allows you to test maps without waiting for players
+      default: op
+      children:
+        CSMinecraft.player: true
+  CSMinecraft.admin:
+    descriptin: allows you to malipulate the maps by commands and overview a game
+    default: op
+    children:
+      CSMinecraft.player: true
+      CSMinecraft.tester: true
+  CSMinecraft.developer:
+    description: allows you to create and delete new maps
+    default: op
+    children:
+      CSMinecraft.admin: true
+      CSMinecraft.tester: true
+commands:
+  cshelp:
+    description: displays all commands
+    usage: /cshelp
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  cslist:
+    description: displays all maps
+    usage: /cslist
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csbounds:
+    description: sets the boundary of the Counter Strike map
+    usage: /csbounds <x1> <y1> <z1> <x2> <y2> <z2>
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csspawn:
+    description: sets the spawn area for the specified team
+    usage: /csspawn [t|ct] <x1> <z1> <x2> <z2> <y>
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csbomb:
+    description: sets the bomb placement for the specified location
+    usage: /csbomb [a|b] <x1> <z1> <x2> <z2> <y>
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csreset:
+    description: resets the coordinates of the specified area
+    usage: /csreset [Bounds|TSpawn|CTSpawn|BombA|BombB]
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csfinish:
+    description: finishes the map and assigns it a name
+    usage: /csfinish <name>
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csdelete:
+    description: deletes the map with the specified name
+    usage: /csdelete <name>
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
+  csjoin:
+    description: lets you join a game
+    usage: /csjoin <name>
+    permission: CSMinecraft.player
+    permission-message: You should have the permission...
+  csforcestart:
+    description: force starts a game
+    usage: /csforcestart
+    permission: CSMinecraft.tester
+    permission-message: You have to be an tester for maps
+  csforcestop:
+    description: force starts a game
+    usage: /csforcestop
+    permission: CSMinecraft.tester
+    permission-message: You have to be an tester for maps
+  csleave:
+    description: leave the current game
+    usage: /csleave
+    permission: CSMinecraft.player
+    permission-message: You should have the permission...
+  csreload:
+    description: reloads the config
+    usage: /csreload
+    permission: CSMinecraft.developer
+    permission-message: You need CSMinecraft developer rights
