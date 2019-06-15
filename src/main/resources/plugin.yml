@@ -2,7 +2,6 @@ name: CSMinecraft
 version: Release 1.0
 main: io.github.keheck.csminecraft.CSMinecraft
 authors: [Keheck]
-soft-depend: [Multiverse-Core]
 permissions:
   CSMinecraft.player:
     description: Erlaubt einem Spieler, die wichtigen Funktionen des Spiels zu nutzen. Für alle Spieler freigeschaltet
