@@ -24,32 +24,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public final class CSMinecraft extends JavaPlugin
 {
-    public static Logger LOGGER;
     public static File maps_dir;
     public static File extConfig;
     public static File indexFile;
+    public static File messages;
     public static FileConfiguration localConfig;
     public static HashMap<String, Map> MAPS;
+    public static HashMap<String, String> MESSAGES;
     public static ArrayList<Player> PLAYERS_IN_GAME;
     private static final int[] defaultBounds = new int[] {0, 0, 0, 0, 0, 0};
 
     @Override
     public void onEnable()
     {
-        LOGGER = getLogger();
-        LOGGER.info("Resetting any data leftover...");
         maps_dir = null;
         extConfig = null;
         indexFile = null;
         localConfig = null;
+        messages = null;
         MAPS = new HashMap<>();
+        MESSAGES = new HashMap<>();
         PLAYERS_IN_GAME = new ArrayList<>();
 
-        LOGGER.info("Setting up commands...");
         getCommand("cshelp").setExecutor(new CSHelpHandler(this));
         getCommand("csbounds").setExecutor(new CSBoundsHandler(this));
         getCommand("csspawn").setExecutor(new CSSpawnHandler(this));
@@ -63,7 +62,6 @@ public final class CSMinecraft extends JavaPlugin
         getCommand("csforcestop").setExecutor(new CSForceStopHandler(this));
         getCommand("csreload").setExecutor(new CSReloadHandler(this));
 
-        LOGGER.info("Setting up listeners...");
         getServer().getPluginManager().registerEvents(new ListenerTeamWin(), this);
         getServer().getPluginManager().registerEvents(new ListenerBombExplode(), this);
         getServer().getPluginManager().registerEvents(new ListenerBombPlaced(), this);
@@ -75,7 +73,6 @@ public final class CSMinecraft extends JavaPlugin
         getServer().getPluginManager().registerEvents(new ListenerItemPickup(), this);
         getServer().getPluginManager().registerEvents(new ListenerTntArrow(), this);
 
-        LOGGER.info("Defaulting boundaries...");
         BoundaryIndicators.MapBounds = new RepeatingBoundaryMarker(this, Particle.VILLAGER_HAPPY, getServer().getWorlds().get(0), defaultBounds);
         BoundaryIndicators.CTSpawnBounds = new RepeatingBoundaryMarker(this, Particle.WATER_SPLASH, getServer().getWorlds().get(0), defaultBounds);
         BoundaryIndicators.TSpawnBounds = new RepeatingBoundaryMarker(this, Particle.WATER_SPLASH, getServer().getWorlds().get(0), defaultBounds);
@@ -88,11 +85,11 @@ public final class CSMinecraft extends JavaPlugin
         BoundaryIndicators.BombA.cancel();
         BoundaryIndicators.BombB.cancel();
 
-        LOGGER.info("Setting up files...");
         File dir = getDataFolder();
         maps_dir = new File(getDataFolder(), "maps");
         extConfig = new File(getDataFolder(), "config.yml");
         indexFile = new File(getDataFolder(), "index.txt");
+        messages = new File(getDataFolder(), "messages.lang");
         localConfig = getConfig();
 
         dir.mkdirs();
@@ -103,6 +100,9 @@ public final class CSMinecraft extends JavaPlugin
 
             if(!indexFile.exists())
                 indexFile.createNewFile();
+
+            if(!messages.exists())
+                messages.createNewFile();
 
             if(!extConfig.exists())
             {
@@ -122,14 +122,14 @@ public final class CSMinecraft extends JavaPlugin
             ConfigValues.dmgHighest = localConfig.getDouble("highestDamage", 51.3);
             ConfigValues.hubLoc = new Location(getServer().getWorld(localConfig.getString("csHub.world", "world")),
                     localConfig.getDouble("csHub.x", 0), localConfig.getDouble("csHub.y", 0), localConfig.getDouble("csHub.z",  0));
+
+
         }
         catch (IOException | InvalidConfigurationException e)
         {
-            LOGGER.severe("Failed to load files! Committing suicide...");
             getServer().getPluginManager().disablePlugin(this);
         }
 
-        LOGGER.info("Handling the rest...");
         MapLoader.loadMaps(this);
     }
 

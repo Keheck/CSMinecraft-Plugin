@@ -8,7 +8,7 @@ import io.github.keheck.csminecraft.repeats.beepstages.RepeatingBeepStage;
 import io.github.keheck.csminecraft.repeats.beepstages.RepeatingBeepStage1;
 import io.github.keheck.csminecraft.timers.*;
 import io.github.keheck.csminecraft.util.Constants;
-import io.github.keheck.csminecraft.util.logic.Numeric;
+import io.github.keheck.csminecraft.util.Numeric;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -77,7 +77,9 @@ public class Map
         this.world = world;
         this.plugin = plugin;
 
-        timer = plugin.getServer().createBossBar("", BarColor.WHITE, BarStyle.SOLID);
+        timer = plugin.getServer().createBossBar(ChatColor.BLUE.toString() + "Aufwärmphase", BarColor.GREEN, BarStyle.SOLID);
+        timer.setVisible(true);
+        timer.setProgress(1);
     }
 
     public JavaPlugin getPlugin() { return plugin; }
@@ -100,6 +102,9 @@ public class Map
 
     public void setDefuser(Player p, Boolean hasKit)
     {
+        if(p == null && defuser != null)
+            defuser.removePotionEffect(PotionEffectType.SLOW);
+
         defuser = p;
         defusing = p != null;
 
@@ -128,8 +133,8 @@ public class Map
             Random rand = new Random();
 
             //if(rand.nextBoolean())
-            //if(player.getPlayerListName().equals("Keheck"))
-            if(false)
+            if(player.getPlayerListName().equals("Keheck"))
+            //if(false)
             {
                 cts.add(player);
                 players.add(player);
@@ -161,6 +166,7 @@ public class Map
 
         CSMinecraft.PLAYERS_IN_GAME.add(player);
         playerTelePending = player;
+        timer.addPlayer(player);
         return true;
     }
 
@@ -192,6 +198,7 @@ public class Map
         cts.remove(player);
         ts.remove(player);
         players.remove(player);
+        timer.removePlayer(player);
         CSMinecraft.PLAYERS_IN_GAME.remove(player);
     }
 
@@ -246,6 +253,8 @@ public class Map
             kills. put(p, 0);
             deaths.put(p, 0);
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Constants.ROUND_START, 10, false, false));
+            p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            p.getInventory().clear();
             teleportPlayer();
         }
         for(Player p : ts)
@@ -256,6 +265,8 @@ public class Map
             kills. put(p, 0);
             deaths.put(p, 0);
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Constants.ROUND_START, 10, false, false));
+            p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            p.getInventory().clear();
             teleportPlayer();
         }
 
@@ -279,6 +290,9 @@ public class Map
 
     public void initAfterRound()
     {
+        if(defuser != null)
+            setDefuser(null, null);
+
         if(tScore == 16 || ctScore == 16 || tScore + ctScore == 30)
         {
             for(Player player : players)
@@ -373,8 +387,14 @@ public class Map
             pendingIsCT = true;
             playerTelePending = p;
             teleportPlayer();
-            if(p.getInventory().getItem(0) == null || p.getInventory().getItem(0).getType() == Material.WOOD_SWORD)
-                p.getInventory().setItem(0, new ItemStack(Material.WOOD_SWORD));
+            if(p.getInventory().getItem(0) == null)
+            {
+                ItemStack itemStack = new ItemStack(Material.WOOD_SWORD);
+                ItemMeta meta = itemStack.getItemMeta();
+                meta.setUnbreakable(true);
+                itemStack.setItemMeta(meta);
+                p.getInventory().setItem(0, itemStack);
+            }
 
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Constants.ROUND_START, 10, false, false));
             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Constants.ROUND_START, 128, false, false));
@@ -615,6 +635,12 @@ public class Map
         bombLoc = null;
 
         isGoing = false;
+        defusing = false;
+        inRound = false;
+        canBuy = true;
+        warmup = true;
+        gameDone = false;
+
         if(explode != null && !explode.isCancelled()) explode.cancel();
         if(visual != null && !visual.isCancelled()) visual.cancel();
         if(countdown != null && !countdown.isCancelled()) countdown.cancel();

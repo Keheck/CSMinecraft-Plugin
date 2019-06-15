@@ -3,8 +3,8 @@ package io.github.keheck.csminecraft.util;
 public interface Constants
 {
     int ROUND_LENGTH = 2200;
-    int ROUND_START = 200;
-    int ROUND_END = 140;
+    int ROUND_START = 100;
+    int ROUND_END = 20;
 
     int SHOP_PERSISTANCE = 400;
 

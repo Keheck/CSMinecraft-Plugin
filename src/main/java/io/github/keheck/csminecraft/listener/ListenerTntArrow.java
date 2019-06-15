@@ -3,11 +3,15 @@ package io.github.keheck.csminecraft.listener;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class ListenerTntArrow implements Listener
 {
@@ -17,8 +21,9 @@ public class ListenerTntArrow implements Listener
         if(event.getEntity().getShooter() instanceof Player && event.getEntity() instanceof Arrow)
         {
             Player shooter = (Player)event.getEntity().getShooter();
+            ItemStack tnt = shooter.getInventory().getItem(2);
 
-            if(CSMinecraft.PLAYERS_IN_GAME.contains(shooter))
+            if(CSMinecraft.PLAYERS_IN_GAME.contains(shooter) && tnt != null && tnt.getType() == Material.TNT)
             {
                 Map map = Map.getMapForPlayer(shooter);
                 map.getTntShooter().add(shooter);
@@ -30,19 +35,33 @@ public class ListenerTntArrow implements Listener
     @EventHandler
     public void onHit(ProjectileHitEvent event)
     {
-        if(event.getEntity().getShooter() instanceof Player && event.getEntity() instanceof Arrow)
-        {
-            Player shooter = (Player)event.getEntity().getShooter();
-            Arrow arrow = (Arrow)event.getEntity();
+        Projectile pro = event.getEntity();
+        LivingEntity ent = (LivingEntity) pro.getShooter();
 
-            if(CSMinecraft.PLAYERS_IN_GAME.contains(shooter))
+        if (pro instanceof Arrow && ent instanceof Player)
+        {
+            Arrow arrow = (Arrow)event.getEntity();
+            Player player = (Player)arrow.getShooter();
+
+            if(Map.getMapForPlayer(player).getTntShooter().contains(player))
             {
-                Location loc = arrow.getLocation();
-                Map map = Map.getMapForPlayer(shooter);
-                map.getTntShooter().remove(shooter);
-                map.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 4, false, false);
+                Location aloc = arrow.getLocation();
+
+                aloc.getWorld().createExplosion(aloc.getX(), aloc.getY(), aloc.getZ(), 2.0f, false, false);
                 arrow.remove();
+                Map.getMapForPlayer(player).getTntShooter().remove(player);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void ensureDamage(EntityDamageEvent event)
+    {
+        if(event.getEntity() instanceof Player)
+        {
+            Player player = (Player)event.getEntity();
+            if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && CSMinecraft.PLAYERS_IN_GAME.contains(player))
+                event.setCancelled(false);
         }
     }
 }

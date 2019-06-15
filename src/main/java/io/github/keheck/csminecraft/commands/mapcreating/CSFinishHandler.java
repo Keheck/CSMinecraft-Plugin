@@ -33,10 +33,7 @@ public class CSFinishHandler extends CommandHandlerBase
         }
 
         if(args.length != 1)
-        {
-            sender.sendMessage(ChatColor.RED + "You have to input a name for the map!");
             return false;
-        }
 
         if(BoundaryIndicators.BombB.isCancelled() || BoundaryIndicators.BombA.isCancelled() || BoundaryIndicators.MapBounds.isCancelled() ||
             BoundaryIndicators.TSpawnBounds.isCancelled() || BoundaryIndicators.CTSpawnBounds.isCancelled())
@@ -105,11 +102,11 @@ public class CSFinishHandler extends CommandHandlerBase
             MapsFile.addMap(((Player) sender).getWorld(), args[0]);
             sender.sendMessage(ChatColor.GREEN + "Map successfuly created!");
 
-            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csfinish", new String[]{"Bounds"});
-            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csfinish", new String[]{"TSpawn"});
-            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csfinish", new String[]{"CTSpawn"});
-            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csfinish", new String[]{"BombA"});
-            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csfinish", new String[]{"BombB"});
+            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csreset", new String[]{"Bounds"});
+            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csreset", new String[]{"TSpawn"});
+            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csreset", new String[]{"CTSpawn"});
+            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csreset", new String[]{"BombA"});
+            plugin.getCommand("csreset").execute(plugin.getServer().getConsoleSender(), "csreset", new String[]{"BombB"});
         }
 
         return true;

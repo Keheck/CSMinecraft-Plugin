@@ -3,7 +3,7 @@ package io.github.keheck.csminecraft.commands.mapcreating;
 import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
 import io.github.keheck.csminecraft.repeats.RepeatingBoundaryMarker;
-import io.github.keheck.csminecraft.util.logic.Numeric;
+import io.github.keheck.csminecraft.util.Numeric;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;

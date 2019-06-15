@@ -3,11 +3,12 @@ package io.github.keheck.csminecraft.listener;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.util.Constants;
-import io.github.keheck.csminecraft.util.sidehandlers.SameTeamKiller;
+import io.github.keheck.csminecraft.util.SameTeamKiller;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.util.Vector;
 
@@ -46,7 +47,9 @@ public class ListenerPlayerKilled implements Listener
                 {
                     died.setGameMode(GameMode.SPECTATOR);
                     died.setVelocity(new Vector());
-                    map.onPlayerKill(died, killer);
+
+                    if(!map.isWarmup())
+                        map.onPlayerKill(died, killer);
                 }
             }
         }
@@ -55,6 +58,24 @@ public class ListenerPlayerKilled implements Listener
             died.setHealth(20);
             died.setGameMode(GameMode.SPECTATOR);
             died.setVelocity(new Vector());
+        }
+    }
+
+    @EventHandler
+    public void defuserDamaged(EntityDamageByEntityEvent event)
+    {
+        if(event.getDamager() instanceof Player && event.getEntity() instanceof Player)
+        {
+            Player damager = (Player)event.getDamager();
+            Player player = (Player)event.getEntity();
+
+            Map map = Map.getMapForPlayer(damager);
+            Map map1 = Map.getMapForPlayer(player);
+
+            if(map == map1)
+            {
+                map.setDefuser(null, null);
+            }
         }
     }
 }

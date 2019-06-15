@@ -24,7 +24,6 @@ public class MapLoader
     {
         String[] names = new String[32];
 
-        CSMinecraft.LOGGER.info("Fetching map names");
         try
         {
             BufferedReader indexReader = new BufferedReader(new FileReader(CSMinecraft.indexFile));
@@ -40,11 +39,9 @@ public class MapLoader
         catch (IOException e)
         {
             e.printStackTrace();
-            CSMinecraft.LOGGER.severe("Couldn't load index file properly");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
 
-        CSMinecraft.LOGGER.info("Fetching bounds for each map");
         try
         {
             for(String fileName : names)
@@ -86,7 +83,6 @@ public class MapLoader
         catch (IOException e)
         {
             e.printStackTrace();
-            CSMinecraft.LOGGER.severe("Couldn't load maps properly");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
     }

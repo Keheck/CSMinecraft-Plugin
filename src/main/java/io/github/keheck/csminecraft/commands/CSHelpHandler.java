@@ -7,10 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CSHelpHandler extends CommandHandlerBase
 {
-    public CSHelpHandler(JavaPlugin plugin)
-    {
-        super(plugin);
-    }
+    public CSHelpHandler(JavaPlugin plugin) { super(plugin); }
 
     /**
      * Executes the given command, returning its success

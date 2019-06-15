@@ -34,6 +34,7 @@ io\github\keheck\csminecraft\commands\joining\CSLeaveHandler.class
 io\github\keheck\csminecraft\listener\ListenerDefuseStart.class
 io\github\keheck\csminecraft\repeats\beepstages\RepeatingBeepStage.class
 io\github\keheck\csminecraft\listener\ListenerShopActions.class
+io\github\keheck\csminecraft\ShopItem.class
 io\github\keheck\csminecraft\util\sidehandlers\SameTeamKiller.class
 io\github\keheck\csminecraft\util\filehandling\MapsFile.class
 io\github\keheck\csminecraft\objectholder\BoundaryIndicators.class

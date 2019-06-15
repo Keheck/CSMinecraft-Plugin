@@ -1,6 +1,6 @@
 package io.github.keheck.csminecraft.repeats;
 
-import io.github.keheck.csminecraft.util.logic.Numeric;
+import io.github.keheck.csminecraft.util.Numeric;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;

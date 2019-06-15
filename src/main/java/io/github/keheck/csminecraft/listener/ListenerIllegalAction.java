@@ -3,10 +3,9 @@ package io.github.keheck.csminecraft.listener;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.util.Constants;
-import io.github.keheck.csminecraft.util.logic.Numeric;
+import io.github.keheck.csminecraft.util.Numeric;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -89,7 +88,7 @@ public class ListenerIllegalAction implements Listener
 
                 if(map.isSameTeam(hurt, damager) && map.isInRound())
                 {
-                    //event.setDamage(event.getDamage()*Constants.TEAM_HURT_MULTIPLIER);
+                    event.setDamage(event.getDamage()*Constants.TEAM_HURT_MULTIPLIER);
                 }
             }
         }

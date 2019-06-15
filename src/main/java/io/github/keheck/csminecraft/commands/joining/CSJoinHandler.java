@@ -28,36 +28,33 @@ public class CSJoinHandler extends CommandHandlerBase
         if(args.length != 1)
             return false;
 
-        if(!(sender instanceof Player))
+        if(sender instanceof Player)
         {
-            CSMinecraft.LOGGER.warning("Command sender was not a player!");
-            return true;
-        }
+            Map mapToJoin = CSMinecraft.MAPS.get(args[0]);
+            boolean notJoined = Map.getMapForPlayer((Player) sender) == null;
 
-        Map mapToJoin = CSMinecraft.MAPS.get(args[0]);
-        boolean notJoined = Map.getMapForPlayer((Player) sender) == null;
-
-        if(mapToJoin != null)
-        {
-            if(notJoined)
+            if(mapToJoin != null)
             {
-                if(mapToJoin.join((Player)sender))
+                if(notJoined)
                 {
-                    mapToJoin.teleportPlayer();
+                    if(mapToJoin.join((Player)sender))
+                    {
+                        mapToJoin.teleportPlayer();
+                    }
+                    else
+                    {
+                        sender.sendMessage(ChatColor.RED + "The map you tried to join was full!");
+                    }
                 }
                 else
                 {
-                    sender.sendMessage(ChatColor.RED + "The map you tried to join was full!");
+                    sender.sendMessage(ChatColor.RED + "You already joined a game!");
                 }
             }
             else
             {
-                sender.sendMessage(ChatColor.RED + "You already joined a game!");
+                sender.sendMessage(ChatColor.RED + "The map you tried to join was not available");
             }
-        }
-        else
-        {
-            sender.sendMessage(ChatColor.RED + "The map you tried to join was not available");
         }
 
         return true;

@@ -2,6 +2,7 @@ package io.github.keheck.csminecraft.listener;
 
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
+import io.github.keheck.csminecraft.ShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -69,10 +70,6 @@ public class ListenerShopActions implements Listener
 
                     player.openInventory(inventory);
                 }
-                else
-                {
-                    event.setCancelled(true);
-                }
             }
         }
     }
@@ -99,34 +96,27 @@ public class ListenerShopActions implements Listener
                 {
                     case IRON_SWORD:
                         Inventory newInvWep = Bukkit.createInventory(null, 45, "Weapons");
-                        newInvWep.setItem(20, new ItemStack(Material.WOOD_SWORD));
-                        newInvWep.setItem(21, new ItemStack(Material.STONE_SWORD));
-                        newInvWep.setItem(22, new ItemStack(Material.IRON_SWORD));
-                        newInvWep.setItem(23, new ItemStack(Material.DIAMOND_SWORD));
-                        newInvWep.setItem(24, new ItemStack(Material.BOW));
-
-                        newInvWep.setItem(29, new ItemStack(Material.GOLD_INGOT, 3));
-                        newInvWep.setItem(30, new ItemStack(Material.GOLD_INGOT, 7));
-                        newInvWep.setItem(31, new ItemStack(Material.GOLD_INGOT, 11));
-                        newInvWep.setItem(32, new ItemStack(Material.GOLD_INGOT, 15));
-                        newInvWep.setItem(33, new ItemStack(Material.GOLD_INGOT, 9));
+                        new ShopItem(Material.WOOD_SWORD, 3, 2).addToInv(newInvWep);
+                        new ShopItem(Material.STONE_SWORD, 7, 3).addToInv(newInvWep);
+                        new ShopItem(Material.IRON_SWORD, 11, 4).addToInv(newInvWep);
+                        new ShopItem(Material.DIAMOND_SWORD, 15, 5).addToInv(newInvWep);
+                        new ShopItem(Material.BOW, 9, 6).addToInv(newInvWep);
 
                         newInvWep.setItem(36, money);
                         event.getWhoClicked().openInventory(newInvWep);
                         break;
                     case ARROW:
                         Inventory newInvArr = Bukkit.createInventory(null, 45, "Arrows");
-                        newInvArr.setItem(21, new ItemStack(Material.TNT));
+                        //new ShopItem(Material.TNT, 5, 3).addToInv(newInvArr);
+
                         ItemStack poisArr = new ItemStack(Material.TIPPED_ARROW);
                         PotionMeta poisArrMeta = (PotionMeta)poisArr.getItemMeta();
                         poisArrMeta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 100, 1, false, false), true);
                         poisArr.setItemMeta(poisArrMeta);
                         newInvArr.setItem(22, poisArr);
-                        newInvArr.setItem(23, new ItemStack(Material.SPECTRAL_ARROW));
-
-                        newInvArr.setItem(30, new ItemStack(Material.GOLD_INGOT, 7));
                         newInvArr.setItem(31, new ItemStack(Material.GOLD_INGOT, 6));
-                        newInvArr.setItem(32, new ItemStack(Material.GOLD_INGOT, 4));
+
+                        new ShopItem(Material.SPECTRAL_ARROW, 9, 5).addToInv(newInvArr);
 
                         newInvArr.setItem(36, money);
                         player.openInventory(newInvArr);
@@ -135,23 +125,12 @@ public class ListenerShopActions implements Listener
                         Inventory newInvUti = Bukkit.createInventory(null, 45, "Utility");
                         if(map.isCT(player))
                         {
-                            ItemStack defuser = new ItemStack(Material.IRON_HOE);
-                            ItemMeta defMeta = defuser.getItemMeta();
-                            defMeta.setDisplayName(Map.getCtColor() + "Defuser");
-                            defuser.setItemMeta(defMeta);
-                            newInvUti.setItem(21, defuser);
-
-                            ItemStack armor = new ItemStack(Material.IRON_CHESTPLATE);
-                            newInvUti.setItem(23, armor);
-
-                            newInvUti.setItem(30, new ItemStack(Material.GOLD_INGOT, 4));
-                            newInvUti.setItem(32, new ItemStack(Material.GOLD_INGOT, 7));
+                            new ShopItem(Material.IRON_HOE, 4, 3).setCustomName(Map.getCtColor() + "Defuser").addToInv(newInvUti);
+                            new ShopItem(Material.IRON_CHESTPLATE, 7, 5).addToInv(newInvUti);
                         }
                         else
                         {
-                            ItemStack armor = new ItemStack(Material.IRON_CHESTPLATE);
-                            newInvUti.setItem(22, armor);
-                            newInvUti.setItem(31, new ItemStack(Material.GOLD_INGOT, 7));
+                            new ShopItem(Material.IRON_CHESTPLATE, 7, 4).addToInv(newInvUti);
                         }
                         newInvUti.setItem(36, money);
                         player.openInventory(newInvUti);
@@ -189,10 +168,6 @@ public class ListenerShopActions implements Listener
                     ItemMeta meta = item.getItemMeta();
                     meta.setUnbreakable(true);
                     item.setItemMeta(meta);
-
-                    if(item.getType() == Material.BOW)
-                        item.addEnchantment(Enchantment.ARROW_INFINITE, 1);
-
                     playerInv.setItem(item.getType() == Material.BOW ? 1 : 0, item);
                     player.closeInventory();
                 }
@@ -207,12 +182,13 @@ public class ListenerShopActions implements Listener
                 if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
                 {
                     map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
-
-                    ItemStack item = event.getCurrentItem();
-                    if(item.getType() == Material.TNT)
-                        playerInv.setItem(29, new ItemStack(Material.ARROW));
-
                     playerInv.setItem(2, event.getCurrentItem());
+
+                    /*if(event.getCurrentItem().getType() == Material.TNT)
+                    {
+                        playerInv.setItem(29, new ItemStack(Material.ARROW));
+                    }*/
+
                     player.closeInventory();
                 }
                 break;
@@ -229,14 +205,26 @@ public class ListenerShopActions implements Listener
                     {
                         ItemStack item = event.getCurrentItem();
 
-                        if(item.getType() == Material.IRON_HOE && playerInv.getItem(8) == null)
+                        if(item.getType() == Material.IRON_HOE)
                         {
+                            if(playerInv.getItem(8) != null)
+                            {
+                                player.openInventory(inv);
+                                return;
+                            }
+
                             map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
                             playerInv.setItem(8, item);
                             player.closeInventory();
                         }
-                        else if(item.getType() == Material.IRON_CHESTPLATE && player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) == null)
+                        else if(item.getType() == Material.IRON_CHESTPLATE)
                         {
+                            if(player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) != null)
+                            {
+                                player.openInventory(inv);
+                                return;
+                            }
+
                             map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
                             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20000000, 2, false, false));
                             player.closeInventory();
@@ -249,8 +237,14 @@ public class ListenerShopActions implements Listener
                     {
                         ItemStack item = event.getCurrentItem();
 
-                        if(item.getType() == Material.IRON_CHESTPLATE && player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) == null)
+                        if(item.getType() == Material.IRON_CHESTPLATE)
                         {
+                            if(player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) != null)
+                            {
+                                player.openInventory(inv);
+                                return;
+                            }
+
                             map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
                             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20000000, 1, false, false));
                             player.closeInventory();

@@ -9,10 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CSForceStopHandler extends CommandHandlerBase
 {
-    public CSForceStopHandler(JavaPlugin plugin)
-    {
-        super(plugin);
-    }
+    public CSForceStopHandler(JavaPlugin plugin) { super(plugin); }
 
     /**
      * Executes the given command, returning its success
@@ -29,7 +26,15 @@ public class CSForceStopHandler extends CommandHandlerBase
         if(sender instanceof Player)
         {
             Map map = Map.getMapForPlayer((Player)sender);
-            map.stopGame();
+
+            if(map != null)
+            {
+                map.stopGame();
+            }
+            else
+            {
+                sender.sendMessage("You didn't join a game!");
+            }
         }
 
         return true;
