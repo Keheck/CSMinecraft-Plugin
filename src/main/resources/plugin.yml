@@ -1,92 +1,91 @@
 name: CSMinecraft
-version: ${project.version}
+version: Release 1.0
 main: io.github.keheck.csminecraft.CSMinecraft
 authors: [Keheck]
 soft-depend: [Multiverse-Core]
 permissions:
   CSMinecraft.player:
-    description: allows a player to use the basic CSMinecraft functionalities
+    description: Erlaubt einem Spieler, die wichtigen Funktionen des Spiels zu nutzen. Für alle Spieler freigeschaltet
     default: true
   CSMinecraft.tester:
-      description: allows you to test maps without waiting for players
-      default: op
-      children:
-        CSMinecraft.player: true
-  CSMinecraft.admin:
-    descriptin: allows you to malipulate the maps by commands and overview a game
+    description: Gibt einem Spieler die Möglichkeit, eine Karte zu testen, ohne auf eine volle Lobby zu warten
+    default: op
+    children:
+      CSMinecraft.player: true
+  CSMinecraft.overwatcher:
+    descriptin: Erlaubt es dir, Spiele von gemeldeten Spielern zu sehen und zu entscheiden, ob der Spieler gecheatet hat
     default: op
     children:
       CSMinecraft.player: true
       CSMinecraft.tester: true
   CSMinecraft.developer:
-    description: allows you to create and delete new maps
+    description: Erleubt es dir, eine neue Map zu erstellen
     default: op
     children:
-      CSMinecraft.admin: true
       CSMinecraft.tester: true
 commands:
   cshelp:
-    description: displays all commands
-    usage: /cshelp
+    description: Zeigt dir alle Befehle
+    usage: /cshelp <seite>
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   cslist:
-    description: displays all maps
-    usage: /cslist
+    description: Zeigt dir alle Maps
+    usage: /cslist {name}
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csbounds:
-    description: sets the boundary of the Counter Strike map
+    description: Setzt die spielbare Fläche der Map
     usage: /csbounds <x1> <y1> <z1> <x2> <y2> <z2>
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csspawn:
-    description: sets the spawn area for the specified team
+    description: Setzt den Spawnbereich des jeweiligen Teams
     usage: /csspawn [t|ct] <x1> <z1> <x2> <z2> <y>
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csbomb:
-    description: sets the bomb placement for the specified location
+    description: Setzt den Bereich des jeweiligen Bombenorts
     usage: /csbomb [a|b] <x1> <z1> <x2> <z2> <y>
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csreset:
-    description: resets the coordinates of the specified area
+    description: Setzt die Koordinaten des jeweiligen Bereichs zurück
     usage: /csreset [Bounds|TSpawn|CTSpawn|BombA|BombB]
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csfinish:
-    description: finishes the map and assigns it a name
+    description: Stellt die Map fertig und gibt ihr den angegebenen Namen
     usage: /csfinish <name>
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csdelete:
-    description: deletes the map with the specified name
+    description: Löscht die Map mit dem angegebenen Namen
     usage: /csdelete <name>
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte
   csjoin:
-    description: lets you join a game
+    description: Lässt dich eine Map betreten
     usage: /csjoin <name>
     permission: CSMinecraft.player
-    permission-message: You should have the permission...
+    permission-message: Du solltest diese Erlaubnis haben... melde dich beim Support
   csforcestart:
-    description: force starts a game
+    description: Startet ein Spiel, bevor die Map voll ist. (nützlich zum testen der Map)
     usage: /csforcestart
     permission: CSMinecraft.tester
-    permission-message: You have to be an tester for maps
+    permission-message: Du brauchst die Rechte eines Map Testers
   csforcestop:
-    description: force starts a game
+    description: Beendet ein Spiel vorzeitig. (nützlich zum testen der Map)
     usage: /csforcestop
     permission: CSMinecraft.tester
-    permission-message: You have to be an tester for maps
+    permission-message: Du brauchst die Rechte eines Map Testers
   csleave:
-    description: leave the current game
+    description: Verlasse die Map in der du bist
     usage: /csleave
     permission: CSMinecraft.player
-    permission-message: You should have the permission...
+    permission-message: Du solltest diese Erlaubnis haben... melde dich beim Support
   csreload:
-    description: reloads the config
+    description: Lädt die Config in das Plugin. Erst dann werden Änderungen wirksam
     usage: /csreload
     permission: CSMinecraft.developer
-    permission-message: You need CSMinecraft developer rights
+    permission-message: Du brauchst Developer Rechte

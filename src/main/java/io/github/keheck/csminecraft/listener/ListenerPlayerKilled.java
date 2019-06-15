@@ -58,6 +58,8 @@ public class ListenerPlayerKilled implements Listener
             died.setHealth(20);
             died.setGameMode(GameMode.SPECTATOR);
             died.setVelocity(new Vector());
+
+            Map.getMapForPlayer(died).onPlayerKill(died, null);
         }
     }
 

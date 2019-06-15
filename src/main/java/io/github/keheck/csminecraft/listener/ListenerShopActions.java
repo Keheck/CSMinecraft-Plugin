@@ -6,7 +6,6 @@ import io.github.keheck.csminecraft.ShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -97,10 +96,10 @@ public class ListenerShopActions implements Listener
                     case IRON_SWORD:
                         Inventory newInvWep = Bukkit.createInventory(null, 45, "Weapons");
                         new ShopItem(Material.WOOD_SWORD, 3, 2).addToInv(newInvWep);
-                        new ShopItem(Material.STONE_SWORD, 7, 3).addToInv(newInvWep);
-                        new ShopItem(Material.IRON_SWORD, 11, 4).addToInv(newInvWep);
-                        new ShopItem(Material.DIAMOND_SWORD, 15, 5).addToInv(newInvWep);
-                        new ShopItem(Material.BOW, 9, 6).addToInv(newInvWep);
+                        new ShopItem(Material.STONE_SWORD, 12, 3).addToInv(newInvWep);
+                        new ShopItem(Material.IRON_SWORD, 24, 4).addToInv(newInvWep);
+                        new ShopItem(Material.DIAMOND_SWORD, 35, 5).addToInv(newInvWep);
+                        new ShopItem(Material.BOW, 13, 6).addToInv(newInvWep);
 
                         newInvWep.setItem(36, money);
                         event.getWhoClicked().openInventory(newInvWep);
@@ -114,9 +113,9 @@ public class ListenerShopActions implements Listener
                         poisArrMeta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 100, 1, false, false), true);
                         poisArr.setItemMeta(poisArrMeta);
                         newInvArr.setItem(22, poisArr);
-                        newInvArr.setItem(31, new ItemStack(Material.GOLD_INGOT, 6));
+                        newInvArr.setItem(31, new ItemStack(Material.GOLD_INGOT, 16));
 
-                        new ShopItem(Material.SPECTRAL_ARROW, 9, 5).addToInv(newInvArr);
+                        new ShopItem(Material.SPECTRAL_ARROW, 13, 5).addToInv(newInvArr);
 
                         newInvArr.setItem(36, money);
                         player.openInventory(newInvArr);
@@ -125,12 +124,12 @@ public class ListenerShopActions implements Listener
                         Inventory newInvUti = Bukkit.createInventory(null, 45, "Utility");
                         if(map.isCT(player))
                         {
-                            new ShopItem(Material.IRON_HOE, 4, 3).setCustomName(Map.getCtColor() + "Defuser").addToInv(newInvUti);
-                            new ShopItem(Material.IRON_CHESTPLATE, 7, 5).addToInv(newInvUti);
+                            new ShopItem(Material.IRON_HOE, 10, 3).setCustomName(Map.getCtColor() + "Defuser").addToInv(newInvUti);
+                            new ShopItem(Material.IRON_CHESTPLATE, 13, 5).addToInv(newInvUti);
                         }
                         else
                         {
-                            new ShopItem(Material.IRON_CHESTPLATE, 7, 4).addToInv(newInvUti);
+                            new ShopItem(Material.IRON_CHESTPLATE, 13, 4).addToInv(newInvUti);
                         }
                         newInvUti.setItem(36, money);
                         player.openInventory(newInvUti);

@@ -2,7 +2,6 @@ package io.github.keheck.csminecraft.listener;
 
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
-import io.github.keheck.csminecraft.util.Constants;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,16 +25,22 @@ public class ListenerBombPlaced implements Listener
 
             if(map.isValidBombPlacement(event.getBlock().getLocation()) && isBomb)
             {
-                map.setupBombPlaced();
-                map.addMoneyToPlayer(placer, Constants.MONEY_PLANT, "Bombe platziert");
-                map.setBombLoc(event.getBlock().getLocation());
-                map.getVisual().cancel();
-                map.getCountdown().cancel();
+                if(map.getPlanter() == null)
+                {
+                    map.setPendingLoc(event.getBlock().getLocation());
+                    map.setPlanter(placer);
+
+                    for(Player player : map.getTs())
+                        player.sendMessage(Map.getTColor() + "Ich platziere die Bombe!");
+                }
+                else
+                {
+                    map.setPendingLoc(null);
+                    map.setPlanter(null);
+                }
             }
-            else
-            {
-                event.setCancelled(true);
-            }
+
+            event.setCancelled(true);
         }
     }
 }

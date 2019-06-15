@@ -13,15 +13,6 @@ public class CSJoinHandler extends CommandHandlerBase
 {
     public CSJoinHandler(JavaPlugin plugin) { super(plugin); }
 
-    /**
-     * Executes the given command, returning its success
-     *
-     * @param sender  Source of the command
-     * @param command Command which was executed
-     * @param label   Alias of the command which was used
-     * @param args    Passed command arguments
-     * @return true if a valid command, otherwise false
-     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -43,17 +34,17 @@ public class CSJoinHandler extends CommandHandlerBase
                     }
                     else
                     {
-                        sender.sendMessage(ChatColor.RED + "The map you tried to join was full!");
+                        sender.sendMessage(ChatColor.RED + "Dieses Spiel ist voll!");
                     }
                 }
                 else
                 {
-                    sender.sendMessage(ChatColor.RED + "You already joined a game!");
+                    sender.sendMessage(ChatColor.RED + "Du bist bereits in einem Spiel!");
                 }
             }
             else
             {
-                sender.sendMessage(ChatColor.RED + "The map you tried to join was not available");
+                sender.sendMessage(ChatColor.RED + "Die Map konnte nicht gefunden werden");
             }
         }
 

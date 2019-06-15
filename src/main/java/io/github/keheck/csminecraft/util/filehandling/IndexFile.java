@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
-public class IndexFile
+class IndexFile
 {
-    public static void delete(String map)
+    static void delete(String map)
     {
         try
         {
@@ -35,7 +35,7 @@ public class IndexFile
         }
     }
 
-    public static void add(String map)
+    static void add(String map)
     {
         try
         {

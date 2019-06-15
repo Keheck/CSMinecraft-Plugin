@@ -76,7 +76,7 @@ public class MapLoader
                         }
                     }
 
-                    CSMinecraft.MAPS.put(fileName, new Map(plugin, fileName, world, bounds));
+                    CSMinecraft.MAPS.put(fileName, new Map(plugin, world, bounds));
                 }
             }
         }

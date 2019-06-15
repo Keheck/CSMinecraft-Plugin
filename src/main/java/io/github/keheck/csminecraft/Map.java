@@ -7,6 +7,7 @@ import io.github.keheck.csminecraft.repeats.RepeatingCountdownVisual;
 import io.github.keheck.csminecraft.repeats.beepstages.RepeatingBeepStage;
 import io.github.keheck.csminecraft.repeats.beepstages.RepeatingBeepStage1;
 import io.github.keheck.csminecraft.timers.*;
+import io.github.keheck.csminecraft.util.ConfigValues;
 import io.github.keheck.csminecraft.util.Constants;
 import io.github.keheck.csminecraft.util.Numeric;
 import org.bukkit.*;
@@ -16,7 +17,6 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +37,7 @@ public class Map
     private boolean canBuy = true;
     private boolean warmup = true;
     private boolean gameDone = false;
+    private boolean switched = false;
 
     private ArrayList<Player> cts = new ArrayList<>();
     private ArrayList<Player> ts  = new ArrayList<>();
@@ -44,7 +45,6 @@ public class Map
     private ArrayList<Player> deadTs  = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Player> tntShooter = new ArrayList<>();
-    private static ArrayList<TNTPrimed> explosions = new ArrayList<>();
 
     private HashMap<Player, Integer> money  = new HashMap<>();
     private HashMap<Player, Integer> kills  = new HashMap<>();
@@ -55,24 +55,26 @@ public class Map
 
     private Player playerTelePending = null;
     private Player defuser = null;
+    private Player planter = null;
 
     private Boolean pendingIsCT = null;
     private World world;
     private JavaPlugin plugin;
     private BossBar timer;
     private Location bombLoc = null;
+    private Location pendingLoc = null;
 
     private TimerBombExplode explode;
     private TimerRoundStart roundStart;
     private TimerDefused defused;
+    private TimerBombPlanted planted;
 
     private RepeatBombWarning warning;
 
     public RepeatingBeepStage beepStage;
 
-    public Map(JavaPlugin plugin, String name, World world, int[][] bounds)
+    public Map(JavaPlugin plugin, World world, int[][] bounds)
     {
-        //this.name = name;
         this.bounds = bounds;
         this.world = world;
         this.plugin = plugin;
@@ -80,6 +82,15 @@ public class Map
         timer = plugin.getServer().createBossBar(ChatColor.BLUE.toString() + "Aufwärmphase", BarColor.GREEN, BarStyle.SOLID);
         timer.setVisible(true);
         timer.setProgress(1);
+    }
+
+    public String getCenter()
+    {
+        int centerX = (bounds[0][0] + bounds[0][3]) / 2;
+        int centerY = (bounds[0][1] + bounds[0][4]) / 2;
+        int centerZ = (bounds[0][2] + bounds[0][5]) / 2;
+
+        return "X: " + centerX + "Y:" + centerY + "Z: " + centerZ;
     }
 
     public JavaPlugin getPlugin() { return plugin; }
@@ -92,11 +103,11 @@ public class Map
 
     public ArrayList<Player> getTntShooter() { return tntShooter; }
 
-    public static ArrayList<TNTPrimed> getExplosions() { return explosions; }
-
     public boolean isDefusing() { return defusing; }
 
     public Player getDefuser() { return defuser; }
+
+    public Player getPlanter() { return planter; }
 
     public boolean isInRound() { return inRound; }
 
@@ -121,6 +132,22 @@ public class Map
         }
     }
 
+    public void setPlanter(Player planter)
+    {
+        if(planter != null)
+        {
+            planted = new TimerBombPlanted(plugin, this);
+            planter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 50, 10, false, false));
+        }
+        else
+        {
+            if(planted != null && !planted.isCancelled()) planted.cancel();
+            this.planter.removePotionEffect(PotionEffectType.SLOW);
+        }
+
+        this.planter = planter;
+    }
+
     public boolean join(Player player)
     {
         if(isGoing)
@@ -132,8 +159,8 @@ public class Map
         {
             Random rand = new Random();
 
-            //if(rand.nextBoolean())
-            if(player.getPlayerListName().equals("Keheck"))
+            if(rand.nextBoolean())
+            //if(player.getPlayerListName().equals("Keheck"))
             //if(false)
             {
                 cts.add(player);
@@ -321,6 +348,7 @@ public class Map
                 money.put(player, Constants.MONEY_START);
             }
 
+            switched = true;
             inRound = false;
         }
 
@@ -387,7 +415,7 @@ public class Map
             pendingIsCT = true;
             playerTelePending = p;
             teleportPlayer();
-            if(p.getInventory().getItem(0) == null)
+            if(p.getInventory().getItem(0) == null || switched)
             {
                 ItemStack itemStack = new ItemStack(Material.WOOD_SWORD);
                 ItemMeta meta = itemStack.getItemMeta();
@@ -396,9 +424,9 @@ public class Map
                 p.getInventory().setItem(0, itemStack);
             }
 
+            p.getInventory().setItem(8, null);
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Constants.ROUND_START, 10, false, false));
             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Constants.ROUND_START, 128, false, false));
-
             p.sendMessage(getCtColor() + "=====================");
             p.sendMessage(getTColor()  + "Money: " + money.get(p) + "G");
             p.sendMessage(getTColor()  + "Kills: " + kills.get(p));
@@ -416,7 +444,7 @@ public class Map
             pendingIsCT = false;
             playerTelePending = p;
             teleportPlayer();
-            if(p.getInventory().getItem(0) == null)
+            if(p.getInventory().getItem(0) == null || switched)
             {
                 ItemStack itemStack = new ItemStack(Material.WOOD_SWORD);
                 ItemMeta meta = itemStack.getItemMeta();
@@ -425,6 +453,7 @@ public class Map
                 p.getInventory().setItem(0, itemStack);
             }
 
+            p.getInventory().setItem(8, null);
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Constants.ROUND_START, 10, false, false));
             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Constants.ROUND_START, 128, false, false));
             p.sendMessage(getCtColor() + "=====================");
@@ -472,10 +501,6 @@ public class Map
 
     private TimerRoundCountdown countdown;
     private RepeatingCountdownVisual visual;
-
-    public TimerRoundCountdown getCountdown() { return countdown; }
-
-    public RepeatingCountdownVisual getVisual() { return visual; }
 
     public BossBar getTimer() { return timer; }
 
@@ -565,7 +590,7 @@ public class Map
         }
 
         deaths.put(died, deaths.get(died)+1);
-        kills.put(killer, kills.get(killer)+1);
+        if(killer != null) kills.put(killer, kills.get(killer)+1);
 
         if(deadCts.size() == cts.size() && cts.size() != 0)
             plugin.getServer().getPluginManager().callEvent(new EventTWin(plugin, this));
@@ -615,6 +640,12 @@ public class Map
     {
         CSMinecraft.PLAYERS_IN_GAME.removeAll(players);
 
+        for(Player player : players)
+        {
+            player.teleport(ConfigValues.hubLoc);
+            player.setGameMode(GameMode.SURVIVAL);
+        }
+
         cts.clear();
         ts.clear();
         deadCts.clear();
@@ -630,9 +661,11 @@ public class Map
 
         playerTelePending = null;
         defuser = null;
+        planter = null;
 
         pendingIsCT = null;
         bombLoc = null;
+        pendingLoc = null;
 
         isGoing = false;
         defusing = false;
@@ -640,6 +673,7 @@ public class Map
         canBuy = true;
         warmup = true;
         gameDone = false;
+        switched = false;
 
         if(explode != null && !explode.isCancelled()) explode.cancel();
         if(visual != null && !visual.isCancelled()) visual.cancel();
@@ -675,9 +709,21 @@ public class Map
 
     public Location getBombLoc() { return bombLoc; }
 
-    public void setBombLoc(Location bombLoc) { this.bombLoc = bombLoc; }
+    public void setBombLoc(Location bombLoc)
+    {
+        this.bombLoc = bombLoc;
+        pendingLoc = null;
+    }
+
+    public Location getPendingLoc() { return pendingLoc; }
+
+    public void setPendingLoc(Location pendingLoc) { this.pendingLoc = pendingLoc; }
 
     public World getWorld() { return world; }
 
     public boolean isWarmup() { return warmup; }
+
+    public RepeatingCountdownVisual getVisual() { return visual; }
+
+    public TimerRoundCountdown getCountdown() { return countdown; }
 }

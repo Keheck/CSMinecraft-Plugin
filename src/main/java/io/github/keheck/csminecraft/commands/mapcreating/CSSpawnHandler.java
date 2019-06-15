@@ -29,7 +29,7 @@ public class CSSpawnHandler extends CommandHandlerBase
     {
         if(!(sender instanceof Player))
         {
-            System.out.println(ChatColor.RED + "Command sender has to be a player!");
+            System.out.println(ChatColor.RED + "Sender muss ein Spieler sein!");
             return true;
         }
 
@@ -42,10 +42,10 @@ public class CSSpawnHandler extends CommandHandlerBase
         {
             try
             {
-                int j = Integer.parseInt(args[i]);
+                Integer.parseInt(args[i]);
             }catch (NumberFormatException e)
             {
-                sender.sendMessage(ChatColor.RED + "Last 5 arguments have to be numbers!");
+                sender.sendMessage(ChatColor.RED + "Letzten 5 Argumente müssen Zahlen sein!");
                 return false;
             }
 
@@ -59,14 +59,14 @@ public class CSSpawnHandler extends CommandHandlerBase
                 case 4:
                     if(!Numeric.between(-29999985, j, 29999985))
                     {
-                        sender.sendMessage(ChatColor.RED + "X/Z Coordinates have to be between -29999984 and 29999984!");
+                        sender.sendMessage(ChatColor.RED + "X/Z Koordinaten müssen zwichen -29999984 und 29999984 liegen!");
                         return true;
                     }
                     break;
                 case 5:
                     if(!Numeric.between(0, j, 256))
                     {
-                        sender.sendMessage(ChatColor.RED + "Y Coordinate has to be between 1 and 255!");
+                        sender.sendMessage(ChatColor.RED + "Y Koordinate muss zwischen 1 und 255 liegen!");
                         return true;
                     }
                     break;
@@ -88,17 +88,17 @@ public class CSSpawnHandler extends CommandHandlerBase
                 if(BoundaryIndicators.TSpawnBounds.isCancelled())
                     BoundaryIndicators.TSpawnBounds = new RepeatingBoundaryMarker(plugin, Particle.CRIT_MAGIC, ((Player) sender).getWorld(), bounds);
                 else
-                    sender.sendMessage(ChatColor.RED + "T-Spawn has to be reset first!");
+                    sender.sendMessage(ChatColor.RED + "T-Spawn muss erst zurückgesetzt werden!");
                 break;
             case "ct":
                 if(BoundaryIndicators.CTSpawnBounds.isCancelled())
                     BoundaryIndicators.CTSpawnBounds = new RepeatingBoundaryMarker(plugin, Particle.WATER_SPLASH, ((Player) sender).getWorld(), bounds);
                 else
-                    sender.sendMessage(ChatColor.RED + "CT-Spawn has to be reset first!");
+                    sender.sendMessage(ChatColor.RED + "AT-Spawn muss erst zurückgesetzt werden!");
                 break;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Boundary created!");
+        sender.sendMessage(ChatColor.GREEN + "Spawn erstellt!");
         return true;
     }
 }

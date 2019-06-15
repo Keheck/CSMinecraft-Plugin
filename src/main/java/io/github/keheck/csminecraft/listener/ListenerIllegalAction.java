@@ -92,6 +92,13 @@ public class ListenerIllegalAction implements Listener
                 }
             }
         }
+        else if(event.getDamager() instanceof Player)
+        {
+            Player damager = (Player)event.getDamager();
+
+            if(CSMinecraft.PLAYERS_IN_GAME.contains(damager))
+                event.setCancelled(true);
+        }
     }
 
     @EventHandler

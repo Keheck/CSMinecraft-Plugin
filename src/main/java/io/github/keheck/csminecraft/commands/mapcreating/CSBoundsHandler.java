@@ -15,21 +15,12 @@ public class CSBoundsHandler extends CommandHandlerBase
 {
     public CSBoundsHandler(JavaPlugin plugin) { super(plugin); }
 
-    /**
-     * Executes the given command, returning its success
-     *
-     * @param sender  Source of the command
-     * @param command Command which was executed
-     * @param label   Alias of the command which was used
-     * @param args    Passed command arguments
-     * @return true if a valid command, otherwise false
-     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if(!(sender instanceof Player))
         {
-            System.out.println(ChatColor.RED + "Sender has to be a player!");
+            System.out.println(ChatColor.RED + "Sender muss ein Spieler sein!");
             return true;
         }
 
@@ -40,10 +31,10 @@ public class CSBoundsHandler extends CommandHandlerBase
         {
             try
             {
-                int i = Integer.parseInt(str);
+                Integer.parseInt(str);
             }catch(NumberFormatException e)
             {
-                sender.sendMessage(ChatColor.RED + "Arguments have to be a number!");
+                sender.sendMessage(ChatColor.RED + "Argumente müssen Zahlen sein!");
                 return false;
             }
         }
@@ -56,7 +47,7 @@ public class CSBoundsHandler extends CommandHandlerBase
             {
                 if(!Numeric.between(0, j, 256))
                 {
-                    sender.sendMessage(ChatColor.RED + "Y Coordinates have to be between 1 and 255!");
+                    sender.sendMessage(ChatColor.RED + "Y Koordinate muss zwichen 1 und 255 liegen!");
                     return false;
                 }
             }
@@ -64,7 +55,7 @@ public class CSBoundsHandler extends CommandHandlerBase
             {
                 if(!Numeric.between(-29999985, j, 29999985))
                 {
-                    sender.sendMessage(ChatColor.RED + "X/Z Coordinates have to be between -29999984 and 29999984!");
+                    sender.sendMessage(ChatColor.RED + "X/Z Koordinaten müssen zwichen -29999984 und 29999984 liegen!");
                     return false;
                 }
             }
@@ -80,9 +71,9 @@ public class CSBoundsHandler extends CommandHandlerBase
         if(BoundaryIndicators.MapBounds.isCancelled())
             BoundaryIndicators.MapBounds = new RepeatingBoundaryMarker(plugin, Particle.VILLAGER_HAPPY, ((Player) sender).getWorld(), bounds);
         else
-            sender.sendMessage(ChatColor.RED + "Boundary has to be reset first!");
+            sender.sendMessage(ChatColor.RED + "Map Bereich muss erst zurückgesetzt werden!");
 
-        sender.sendMessage(ChatColor.GREEN + "Boundary created!");
+        sender.sendMessage(ChatColor.GREEN + "Map Bereich erstellt!");
         return true;
     }
 }

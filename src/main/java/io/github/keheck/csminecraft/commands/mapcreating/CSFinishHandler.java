@@ -28,7 +28,7 @@ public class CSFinishHandler extends CommandHandlerBase
     {
         if(!(sender instanceof Player))
         {
-            sender.sendMessage(ChatColor.RED + "Sender has to be a player!");
+            sender.sendMessage(ChatColor.RED + "Sender muss ein Spieler sein!");
             return true;
         }
 
@@ -38,18 +38,18 @@ public class CSFinishHandler extends CommandHandlerBase
         if(BoundaryIndicators.BombB.isCancelled() || BoundaryIndicators.BombA.isCancelled() || BoundaryIndicators.MapBounds.isCancelled() ||
             BoundaryIndicators.TSpawnBounds.isCancelled() || BoundaryIndicators.CTSpawnBounds.isCancelled())
         {
-            StringBuilder builder = new StringBuilder("Not all areas were set! Missing Boundaries: ");
+            StringBuilder builder = new StringBuilder("Nicht alle Bereiche wurden Definiert. Fehlende Bereiche: ");
 
             if(BoundaryIndicators.BombA.isCancelled())
-                builder.append("Bombsite A, ");
+                builder.append("Bombenort A, ");
             if(BoundaryIndicators.BombB.isCancelled())
-                builder.append("Bombsite B, ");
+                builder.append("Bombenort B, ");
             if(BoundaryIndicators.CTSpawnBounds.isCancelled())
-                builder.append("CT-Spawn, ");
+                builder.append("AT-Spawn, ");
             if(BoundaryIndicators.TSpawnBounds.isCancelled())
                 builder.append("T-Spawn, ");
             if(BoundaryIndicators.MapBounds.isCancelled())
-                builder.append("Boundaries, ");
+                builder.append("Map Bereich, ");
 
             builder.delete(builder.length()-2, builder.length());
 

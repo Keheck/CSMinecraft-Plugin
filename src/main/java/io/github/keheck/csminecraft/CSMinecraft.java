@@ -2,6 +2,7 @@ package io.github.keheck.csminecraft;
 
 import io.github.keheck.csminecraft.commands.CSHelpHandler;
 import io.github.keheck.csminecraft.commands.CSReloadHandler;
+import io.github.keheck.csminecraft.commands.games.CSListHandler;
 import io.github.keheck.csminecraft.commands.mapcreating.*;
 import io.github.keheck.csminecraft.commands.games.CSForceStartHandler;
 import io.github.keheck.csminecraft.commands.games.CSForceStopHandler;
@@ -61,6 +62,7 @@ public final class CSMinecraft extends JavaPlugin
         getCommand("csforcestart").setExecutor(new CSForceStartHandler(this));
         getCommand("csforcestop").setExecutor(new CSForceStopHandler(this));
         getCommand("csreload").setExecutor(new CSReloadHandler(this));
+        getCommand("cslist").setExecutor(new CSListHandler(this));
 
         getServer().getPluginManager().registerEvents(new ListenerTeamWin(), this);
         getServer().getPluginManager().registerEvents(new ListenerBombExplode(), this);
@@ -140,6 +142,6 @@ public final class CSMinecraft extends JavaPlugin
         Set<String> mapKeys = MAPS.keySet();
 
         for(String key : mapKeys)
-            MAPS.get(key).getTimer().setVisible(false);
+            MAPS.get(key).stopGame();
     }
 }

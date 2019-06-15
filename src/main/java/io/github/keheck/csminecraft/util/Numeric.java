@@ -46,7 +46,7 @@ public class Numeric
         return betweenX && betweenY && betweenZ;
     }
 
-    public static int[] sortCoordinates(int[] coords)
+    public static void sortCoordinates(int[] coords)
     {
         for(int i = 0; i < 3; i++)
         {
@@ -57,7 +57,5 @@ public class Numeric
                 coords[i+3] = cache;
             }
         }
-
-        return coords;
     }
 }

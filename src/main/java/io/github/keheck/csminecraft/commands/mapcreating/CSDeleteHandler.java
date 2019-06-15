@@ -32,10 +32,10 @@ public class CSDeleteHandler extends CommandHandlerBase
         if(MapsFile.contains(args[0]))
         {
             MapsFile.deleteMap(args[0]);
-            sender.sendMessage("");
+            sender.sendMessage(ChatColor.GREEN + "Map gelöscht");
         }
         else
-            sender.sendMessage(ChatColor.RED + "Couldn't find the map!");
+            sender.sendMessage(ChatColor.RED + "Konnte die Map nicht finden!");
 
         return true;
     }

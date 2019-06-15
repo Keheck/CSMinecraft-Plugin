@@ -7,8 +7,5 @@ public abstract class CommandHandlerBase implements CommandExecutor
 {
     protected JavaPlugin plugin;
 
-    public CommandHandlerBase(JavaPlugin plugin)
-    {
-        this.plugin = plugin;
-    }
+    public CommandHandlerBase(JavaPlugin plugin) { this.plugin = plugin; }
 }

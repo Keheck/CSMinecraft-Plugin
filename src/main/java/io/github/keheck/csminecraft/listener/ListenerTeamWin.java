@@ -22,6 +22,11 @@ public class ListenerTeamWin implements Listener
             map.addMoneyToPlayer(player, Constants.MONEY_TEAMWIN, "Runde gewonnen");
         }
 
+        for(Player player : map.getTs())
+        {
+            map.addMoneyToPlayer(player, Constants.MONEY_TEAMLOSE, "Runde verloren");
+        }
+
         map.initAfterRound();
     }
 
@@ -35,6 +40,11 @@ public class ListenerTeamWin implements Listener
         for(Player player : map.getTs())
         {
             map.addMoneyToPlayer(player, Constants.MONEY_TEAMWIN, "Runde gewonnen");
+        }
+
+        for(Player player : map.getCts())
+        {
+            map.addMoneyToPlayer(player, Constants.MONEY_TEAMLOSE, "Runde verloren");
         }
 
         map.initAfterRound();
