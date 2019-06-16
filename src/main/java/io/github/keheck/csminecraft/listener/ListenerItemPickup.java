@@ -2,6 +2,7 @@ package io.github.keheck.csminecraft.listener;
 
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
@@ -36,14 +37,14 @@ public class ListenerItemPickup implements Listener
                 else if(!map.isCT(player) && Map.getItemType(item.getItemStack()) == 2)
                 {
                     ArrayList<String> lore = new ArrayList<>();
-                    lore.add("Hochexplosiver Block und fähig ganze");
-                    lore.add("Strukturen zu zerstören! Platziere es");
-                    lore.add("an einem wichtigen Ort und wir haben");
-                    lore.add("in 40 Sekunden gewonnen!");
+                    lore.add(LangLoader.get("map.game.item.bomb.lore1"));
+                    lore.add(LangLoader.get("map.game.item.bomb.lore2"));
+                    lore.add(LangLoader.get("map.game.item.bomb.lore3"));
+                    lore.add(LangLoader.get("map.game.item.bomb.lore4"));
 
                     ItemStack tnt = new ItemStack(Material.TNT);
                     ItemMeta meta = tnt.getItemMeta();
-                    meta.setDisplayName(Map.getTColor() + "Bombe");
+                    meta.setDisplayName(Map.getTColor() + LangLoader.get("map.game.item.bomb"));
                     meta.setLore(lore);
                     tnt.setItemMeta(meta);
 

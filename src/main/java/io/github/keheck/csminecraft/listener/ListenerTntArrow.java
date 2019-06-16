@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +48,7 @@ public class ListenerTntArrow implements Listener
             {
                 Location aloc = arrow.getLocation();
 
-                aloc.getWorld().createExplosion(aloc.getX(), aloc.getY(), aloc.getZ(), 2.0f, false, false);
+                aloc.getWorld().spawn(arrow.getLocation(), TNTPrimed.class).setFuseTicks(1);
                 arrow.remove();
                 Map.getMapForPlayer(player).getTntShooter().remove(player);
             }
@@ -55,12 +56,14 @@ public class ListenerTntArrow implements Listener
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void ensureDamage(EntityDamageEvent event)
+    public void ensureDamage(ExplosionPrimeEvent event)
     {
+        System.out.println("hello");
+
         if(event.getEntity() instanceof Player)
         {
             Player player = (Player)event.getEntity();
-            if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && CSMinecraft.PLAYERS_IN_GAME.contains(player))
+            if(CSMinecraft.PLAYERS_IN_GAME.contains(player))
                 event.setCancelled(false);
         }
     }

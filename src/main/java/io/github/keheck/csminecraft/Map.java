@@ -2,6 +2,7 @@ package io.github.keheck.csminecraft;
 
 import io.github.keheck.csminecraft.events.EventCTWin;
 import io.github.keheck.csminecraft.events.EventTWin;
+import io.github.keheck.csminecraft.events.GameStartEvent;
 import io.github.keheck.csminecraft.repeats.RepeatBombWarning;
 import io.github.keheck.csminecraft.repeats.RepeatingCountdownVisual;
 import io.github.keheck.csminecraft.repeats.beepstages.RepeatingBeepStage;
@@ -10,6 +11,7 @@ import io.github.keheck.csminecraft.timers.*;
 import io.github.keheck.csminecraft.util.ConfigValues;
 import io.github.keheck.csminecraft.util.Constants;
 import io.github.keheck.csminecraft.util.Numeric;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -79,7 +81,8 @@ public class Map
         this.world = world;
         this.plugin = plugin;
 
-        timer = plugin.getServer().createBossBar(ChatColor.BLUE.toString() + "Aufwärmphase", BarColor.GREEN, BarStyle.SOLID);
+        System.out.println(LangLoader.get("map.game.warmup"));
+        timer = plugin.getServer().createBossBar(ChatColor.BLUE.toString() + LangLoader.get("map.game.warmup"), BarColor.GREEN, BarStyle.SOLID);
         timer.setVisible(true);
         timer.setProgress(1);
     }
@@ -90,7 +93,7 @@ public class Map
         int centerY = (bounds[0][1] + bounds[0][4]) / 2;
         int centerZ = (bounds[0][2] + bounds[0][5]) / 2;
 
-        return "X: " + centerX + "Y:" + centerY + "Z: " + centerZ;
+        return "X: " + centerX + " Y:" + centerY + " Z: " + centerZ;
     }
 
     public JavaPlugin getPlugin() { return plugin; }
@@ -297,8 +300,8 @@ public class Map
             teleportPlayer();
         }
 
+        plugin.getServer().getPluginManager().callEvent(new GameStartEvent(this));
         setupTimer(BarColor.YELLOW);
-
         setupRound();
     }
 
@@ -311,8 +314,8 @@ public class Map
     private String getWinner()
     {
         return tScore == 16 ?
-                getTColor() + "Die Terroristen gewinnen!" : ctScore == 16 ?
-                getCtColor() + "Die Antiterroreinheit gewinnt!" : "Unentschieden!";
+                getTColor() + LangLoader.get("map.game.end.twin") : ctScore == 16 ?
+                getCtColor() + LangLoader.get("map.game.end.ctwin") : LangLoader.get("map.game.end.draw");
     }
 
     public void initAfterRound()
@@ -324,7 +327,7 @@ public class Map
         {
             for(Player player : players)
             {
-                player.sendMessage("Das Spiel ist vorbei! Das Ergebnis ist: " + getWinner());
+                player.sendMessage(LangLoader.get("map.game.end.player_message") + getWinner());
             }
 
             gameDone = true;
@@ -344,7 +347,7 @@ public class Map
 
             for(Player player : players)
             {
-                player.sendMessage("15 Runden sind nun vorbei! Teams werden gewechselt!");
+                player.sendMessage(LangLoader.get("map.game.half"));
                 money.put(player, Constants.MONEY_START);
             }
 
@@ -472,14 +475,14 @@ public class Map
             Random random = new Random();
 
             ArrayList<String> lore = new ArrayList<>();
-            lore.add("Hochexplosiver Block und fähig ganze");
-            lore.add("Strukturen zu zerstören! Platziere es");
-            lore.add("an einem wichtigen Ort und wir haben");
-            lore.add("in 40 Sekunden gewonnen!");
+            lore.add(LangLoader.get("map.game.item.bomb.lore1"));
+            lore.add(LangLoader.get("map.game.item.bomb.lore2"));
+            lore.add(LangLoader.get("map.game.item.bomb.lore3"));
+            lore.add(LangLoader.get("map.game.item.bomb.lore4"));
 
             ItemStack tnt = new ItemStack(Material.TNT);
             ItemMeta meta = tnt.getItemMeta();
-            meta.setDisplayName(getTColor() + "Bombe");
+            meta.setDisplayName(getTColor() + LangLoader.get("map.game.item.bomb"));
             meta.setLore(lore);
             tnt.setItemMeta(meta);
 
@@ -697,7 +700,7 @@ public class Map
     {
         for(Player player : players)
         {
-            player.sendTitle(ChatColor.RED + "TNT wurde platziert!", ChatColor.RED + "40 Sekunden bis zur Explosion", 20, 40, 20);
+            player.sendTitle(ChatColor.RED + LangLoader.get("map.game.bomb_placed.title"), ChatColor.RED + LangLoader.get("map.game.bomb_placed.sub"), 20, 40, 20);
         }
 
         explode = new TimerBombExplode(plugin, this);

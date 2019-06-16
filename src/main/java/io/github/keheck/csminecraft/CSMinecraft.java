@@ -12,6 +12,7 @@ import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
 import io.github.keheck.csminecraft.listener.*;
 import io.github.keheck.csminecraft.repeats.RepeatingBoundaryMarker;
 import io.github.keheck.csminecraft.util.ConfigValues;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import io.github.keheck.csminecraft.util.loaders.MapLoader;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -132,6 +133,7 @@ public final class CSMinecraft extends JavaPlugin
             getServer().getPluginManager().disablePlugin(this);
         }
 
+        LangLoader.downloadLang(this);
         MapLoader.loadMaps(this);
     }
 

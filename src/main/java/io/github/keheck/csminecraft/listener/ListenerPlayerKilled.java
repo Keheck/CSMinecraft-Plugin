@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.util.Constants;
 import io.github.keheck.csminecraft.util.SameTeamKiller;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,12 +30,12 @@ public class ListenerPlayerKilled implements Listener
             {
                 if(map.isSameTeam(died, killer))
                 {
-                    map.addMoneyToPlayer(killer, Constants.MONEY_TEAMKILL, "Mitglied getötet");
+                    map.addMoneyToPlayer(killer, Constants.MONEY_TEAMKILL, LangLoader.get("map.game.money.killed.mate"));
                     SameTeamKiller.killedSamePlayer(map, killer, died);
                 }
                 else
                 {
-                    map.addMoneyToPlayer(killer, Constants.MONEY_KILL, "Gegner getötet");
+                    map.addMoneyToPlayer(killer, Constants.MONEY_KILL, LangLoader.get("map.game.money.killed.mate"));
                 }
 
                 died.setHealth(20);

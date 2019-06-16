@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.util.Constants;
 import io.github.keheck.csminecraft.util.Numeric;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -60,9 +61,9 @@ public class ListenerIllegalAction implements Listener
                 player.teleport(newLoc);
 
                 if(map.isCT(player))
-                    player.sendMessage(Map.getCtColor() + "Nicht der richtige Zeitpunkt! Du must die Terroristen auf halten!");
+                    player.sendMessage(Map.getCtColor() + LangLoader.get("map.game.illegal.movect"));
                 else
-                    player.sendMessage(Map.getTColor() +  "Wir müssen noch den anderen zeigen, wer hier das Sagen hat!");
+                    player.sendMessage(Map.getTColor() +  LangLoader.get("We have to show them who's boss!"));
             }
         }
     }

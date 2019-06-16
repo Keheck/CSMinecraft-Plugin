@@ -3,6 +3,7 @@ package io.github.keheck.csminecraft.listener;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.util.Constants;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -46,7 +47,7 @@ public class ListenerDefuseStart implements Listener
 
                     for (Player ct : map.getCts())
                     {
-                        ct.sendMessage(p.getDisplayName() + ": " + ChatColor.AQUA.toString() + "Ich entschärfe das TNT!");
+                        ct.sendMessage(p.getDisplayName() + ": " + ChatColor.AQUA.toString() + LangLoader.get("map.game.player.defuse"));
                     }
                 }
                 else if(map.isDefusing() && map.getDefuser() == p)

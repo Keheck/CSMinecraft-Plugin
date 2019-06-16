@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
 import io.github.keheck.csminecraft.repeats.RepeatingBoundaryMarker;
 import io.github.keheck.csminecraft.util.filehandling.MapsFile;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,7 +29,7 @@ public class CSFinishHandler extends CommandHandlerBase
     {
         if(!(sender instanceof Player))
         {
-            sender.sendMessage(ChatColor.RED + "Sender muss ein Spieler sein!");
+            sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.wrong_sender"));
             return true;
         }
 
@@ -38,18 +39,18 @@ public class CSFinishHandler extends CommandHandlerBase
         if(BoundaryIndicators.BombB.isCancelled() || BoundaryIndicators.BombA.isCancelled() || BoundaryIndicators.MapBounds.isCancelled() ||
             BoundaryIndicators.TSpawnBounds.isCancelled() || BoundaryIndicators.CTSpawnBounds.isCancelled())
         {
-            StringBuilder builder = new StringBuilder("Nicht alle Bereiche wurden Definiert. Fehlende Bereiche: ");
+            StringBuilder builder = new StringBuilder(LangLoader.get("command.error.finish.bounds"));
 
             if(BoundaryIndicators.BombA.isCancelled())
-                builder.append("Bombenort A, ");
+                builder.append(LangLoader.get("command.error.finish.missingA"));
             if(BoundaryIndicators.BombB.isCancelled())
-                builder.append("Bombenort B, ");
+                builder.append(LangLoader.get("command.error.finish.missingB"));
             if(BoundaryIndicators.CTSpawnBounds.isCancelled())
-                builder.append("AT-Spawn, ");
+                builder.append(LangLoader.get("command.error.finish.missingCT"));
             if(BoundaryIndicators.TSpawnBounds.isCancelled())
-                builder.append("T-Spawn, ");
+                builder.append(LangLoader.get("command.error.finish.missingT"));
             if(BoundaryIndicators.MapBounds.isCancelled())
-                builder.append("Map Bereich, ");
+                builder.append(LangLoader.get("command.error.finish.missingBounds"));
 
             builder.delete(builder.length()-2, builder.length());
 
@@ -60,7 +61,7 @@ public class CSFinishHandler extends CommandHandlerBase
         {
             if(MapsFile.contains(args[0]))
             {
-                sender.sendMessage(ChatColor.RED + "There is already a map called " + args[0] + "!");
+                sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.finish.map_named", args[0]));
                 return true;
             }
 
@@ -84,7 +85,7 @@ public class CSFinishHandler extends CommandHandlerBase
                 {
                     if (mainBounds[j] > innerBound[j])
                     {
-                        sender.sendMessage(ChatColor.RED + "A boundary reached outside the main boundary! Adjust your bounds to make it fit the main bounds");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.finish.outside"));
                         return false;
                     }
                 }
@@ -93,7 +94,7 @@ public class CSFinishHandler extends CommandHandlerBase
                 {
                     if (mainBounds[j] < innerBound[j])
                     {
-                        sender.sendMessage(ChatColor.RED + "A boundary reached outside the main boundary! Adjust your bounds to make it fit the main bounds");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.finish.outside"));
                         return false;
                     }
                 }

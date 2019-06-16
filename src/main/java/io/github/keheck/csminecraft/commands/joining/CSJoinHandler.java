@@ -3,6 +3,7 @@ package io.github.keheck.csminecraft.commands.joining;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.Map;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -34,17 +35,17 @@ public class CSJoinHandler extends CommandHandlerBase
                     }
                     else
                     {
-                        sender.sendMessage(ChatColor.RED + "Dieses Spiel ist voll!");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("map.join.full"));
                     }
                 }
                 else
                 {
-                    sender.sendMessage(ChatColor.RED + "Du bist bereits in einem Spiel!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("map.join.already"));
                 }
             }
             else
             {
-                sender.sendMessage(ChatColor.RED + "Die Map konnte nicht gefunden werden");
+                sender.sendMessage(ChatColor.RED + LangLoader.get("map.join.not_available"));
             }
         }
 

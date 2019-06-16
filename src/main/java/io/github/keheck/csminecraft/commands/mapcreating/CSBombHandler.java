@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
 import io.github.keheck.csminecraft.repeats.RepeatingBoundaryMarker;
 import io.github.keheck.csminecraft.util.Numeric;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -20,7 +21,7 @@ public class CSBombHandler extends CommandHandlerBase
     {
         if(!(sender instanceof Player))
         {
-            System.out.println(ChatColor.RED + "Sender muss ein Spieler sein!");
+            System.out.println(ChatColor.RED + LangLoader.get("command.error.wrong_sender"));
             return true;
         }
 
@@ -37,7 +38,7 @@ public class CSBombHandler extends CommandHandlerBase
             }
             catch(NumberFormatException e)
             {
-                sender.sendMessage(ChatColor.RED + "Letzten 5 Argumente müssen Zahlen sein!");
+                sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.not_nums"));
                 return false;
             }
 
@@ -51,14 +52,14 @@ public class CSBombHandler extends CommandHandlerBase
                 case 4:
                     if(!Numeric.between(-29999985, j, 29999985))
                     {
-                        sender.sendMessage(ChatColor.RED + "X/Z Koordinaten müssen zwichen -29999984 und 29999984 liegen!");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.boundsxz"));
                         return false;
                     }
                     break;
                 case 5:
                     if(!Numeric.between(0, j, 256))
                     {
-                        sender.sendMessage(ChatColor.RED + "Y Koordinate muss zwichen 1 und 255 liegen!");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.boundsy"));
                         return false;
                     }
                     break;
@@ -80,17 +81,17 @@ public class CSBombHandler extends CommandHandlerBase
                 if(BoundaryIndicators.BombA.isCancelled())
                     BoundaryIndicators.BombA = new RepeatingBoundaryMarker(plugin, Particle.FLAME, ((Player) sender).getWorld(), bounds);
                 else
-                    sender.sendMessage(ChatColor.RED + "Bombenort A muss erst mal zurückgesetzt werden!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.bounds.bomba"));
                 break;
             case "b":
                 if(BoundaryIndicators.BombB.isCancelled())
                     BoundaryIndicators.BombB = new RepeatingBoundaryMarker(plugin, Particle.SMOKE_NORMAL, ((Player) sender).getWorld(), bounds);
                 else
-                    sender.sendMessage(ChatColor.RED + "Bombenort B muss erst mal zurückgesetzt werden!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.bounds.bombb"));
                 break;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Bombenort erstellt!");
+        sender.sendMessage(ChatColor.GREEN + LangLoader.get("command.success.bounds"));
         return true;
     }
 }

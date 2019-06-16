@@ -2,6 +2,8 @@ package io.github.keheck.csminecraft.commands.games;
 
 import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.Map;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,7 +21,7 @@ public class CSForceStartHandler extends CommandHandlerBase
 
         if(!(sender instanceof Player))
         {
-            sender.sendMessage("Befehls sender muss ein Spieler sein");
+            sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.wrong_sender"));
             return true;
         }
 
@@ -31,7 +33,7 @@ public class CSForceStartHandler extends CommandHandlerBase
         }
         else
         {
-            sender.sendMessage("Du bist keinem Spiel beigetreten!");
+            sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.not_joined"));
         }
 
         return true;

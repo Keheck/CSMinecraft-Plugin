@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.events.EventCTWin;
 import io.github.keheck.csminecraft.events.EventTWin;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.util.Constants;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,12 +20,12 @@ public class ListenerTeamWin implements Listener
 
         for(Player player : map.getCts())
         {
-            map.addMoneyToPlayer(player, Constants.MONEY_TEAMWIN, "Runde gewonnen");
+            map.addMoneyToPlayer(player, Constants.MONEY_TEAMWIN, LangLoader.get("map.game.money.win"));
         }
 
         for(Player player : map.getTs())
         {
-            map.addMoneyToPlayer(player, Constants.MONEY_TEAMLOSE, "Runde verloren");
+            map.addMoneyToPlayer(player, Constants.MONEY_TEAMLOSE, LangLoader.get("map.game.money.lose"));
         }
 
         map.initAfterRound();
@@ -39,12 +40,12 @@ public class ListenerTeamWin implements Listener
 
         for(Player player : map.getTs())
         {
-            map.addMoneyToPlayer(player, Constants.MONEY_TEAMWIN, "Runde gewonnen");
+            map.addMoneyToPlayer(player, Constants.MONEY_TEAMWIN, LangLoader.get("map.game.money.win"));
         }
 
         for(Player player : map.getCts())
         {
-            map.addMoneyToPlayer(player, Constants.MONEY_TEAMLOSE, "Runde verloren");
+            map.addMoneyToPlayer(player, Constants.MONEY_TEAMLOSE, LangLoader.get("map.game.money.lose"));
         }
 
         map.initAfterRound();

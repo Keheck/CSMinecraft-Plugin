@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
 import io.github.keheck.csminecraft.repeats.RepeatingBoundaryMarker;
 import io.github.keheck.csminecraft.util.Numeric;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -20,7 +21,7 @@ public class CSBoundsHandler extends CommandHandlerBase
     {
         if(!(sender instanceof Player))
         {
-            System.out.println(ChatColor.RED + "Sender muss ein Spieler sein!");
+            System.out.println(ChatColor.RED + LangLoader.get("command.error.wrong_sender"));
             return true;
         }
 
@@ -34,7 +35,7 @@ public class CSBoundsHandler extends CommandHandlerBase
                 Integer.parseInt(str);
             }catch(NumberFormatException e)
             {
-                sender.sendMessage(ChatColor.RED + "Argumente müssen Zahlen sein!");
+                sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.not_nums"));
                 return false;
             }
         }
@@ -47,7 +48,7 @@ public class CSBoundsHandler extends CommandHandlerBase
             {
                 if(!Numeric.between(0, j, 256))
                 {
-                    sender.sendMessage(ChatColor.RED + "Y Koordinate muss zwichen 1 und 255 liegen!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.boundsy"));
                     return false;
                 }
             }
@@ -55,7 +56,7 @@ public class CSBoundsHandler extends CommandHandlerBase
             {
                 if(!Numeric.between(-29999985, j, 29999985))
                 {
-                    sender.sendMessage(ChatColor.RED + "X/Z Koordinaten müssen zwichen -29999984 und 29999984 liegen!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.boundsxz"));
                     return false;
                 }
             }
@@ -71,9 +72,9 @@ public class CSBoundsHandler extends CommandHandlerBase
         if(BoundaryIndicators.MapBounds.isCancelled())
             BoundaryIndicators.MapBounds = new RepeatingBoundaryMarker(plugin, Particle.VILLAGER_HAPPY, ((Player) sender).getWorld(), bounds);
         else
-            sender.sendMessage(ChatColor.RED + "Map Bereich muss erst zurückgesetzt werden!");
+            sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.bounds.bound"));
 
-        sender.sendMessage(ChatColor.GREEN + "Map Bereich erstellt!");
+        sender.sendMessage(ChatColor.GREEN + LangLoader.get("command.success.bounds"));
         return true;
     }
 }

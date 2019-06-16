@@ -3,6 +3,7 @@ package io.github.keheck.csminecraft.listener;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.ShopItem;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -36,22 +37,22 @@ public class ListenerShopActions implements Listener
                 {
                     ItemStack money = new ItemStack(Material.GOLD_INGOT, map.getMoney(player));
                     ItemMeta monMeta = money.getItemMeta();
-                    monMeta.setDisplayName(Map.getTColor() + "MONEY");
+                    monMeta.setDisplayName(Map.getTColor() + LangLoader.get("map.shop.money"));
                     money.setItemMeta(monMeta);
 
                     ItemStack weapons = new ItemStack(Material.IRON_SWORD);
                     ItemMeta wepMeta = weapons.getItemMeta();
-                    wepMeta.setDisplayName(ChatColor.GRAY.toString() + "WEAPONS");
+                    wepMeta.setDisplayName(ChatColor.GRAY.toString() + LangLoader.get("map.shop.weapons"));
                     weapons.setItemMeta(wepMeta);
 
                     ItemStack arrows = new ItemStack(Material.ARROW);
                     ItemMeta arrMeta = arrows.getItemMeta();
-                    arrMeta.setDisplayName(Map.getTColor() + "ARROWS");
+                    arrMeta.setDisplayName(Map.getTColor() + LangLoader.get("map.shop.arrows"));
                     arrows.setItemMeta(arrMeta);
 
                     ItemStack utility = new ItemStack(Material.POTION);
                     ItemMeta utiMeta = utility.getItemMeta();
-                    utiMeta.setDisplayName(Map.getCtColor() + "Utility");
+                    utiMeta.setDisplayName(Map.getCtColor() + LangLoader.get("map.shop.utility"));
                     ((PotionMeta)utiMeta).addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 0, 0), true);
                     utility.setItemMeta(utiMeta);
 
@@ -86,7 +87,7 @@ public class ListenerShopActions implements Listener
 
             ItemStack money = new ItemStack(Material.GOLD_INGOT, map.getMoney(player));
             ItemMeta monMeta = money.getItemMeta();
-            monMeta.setDisplayName(Map.getTColor() + "MONEY");
+            monMeta.setDisplayName(Map.getTColor() + LangLoader.get("map.shop.money"));
             money.setItemMeta(monMeta);
 
             if(material != null)
@@ -94,7 +95,7 @@ public class ListenerShopActions implements Listener
                 switch (material)
                 {
                     case IRON_SWORD:
-                        Inventory newInvWep = Bukkit.createInventory(null, 45, "Weapons");
+                        Inventory newInvWep = Bukkit.createInventory(null, 45, LangLoader.get("map.shop.weapons"));
                         new ShopItem(Material.WOOD_SWORD, 3, 2).addToInv(newInvWep);
                         new ShopItem(Material.STONE_SWORD, 12, 3).addToInv(newInvWep);
                         new ShopItem(Material.IRON_SWORD, 24, 4).addToInv(newInvWep);
@@ -105,8 +106,8 @@ public class ListenerShopActions implements Listener
                         event.getWhoClicked().openInventory(newInvWep);
                         break;
                     case ARROW:
-                        Inventory newInvArr = Bukkit.createInventory(null, 45, "Arrows");
-                        //new ShopItem(Material.TNT, 5, 3).addToInv(newInvArr);
+                        Inventory newInvArr = Bukkit.createInventory(null, 45, LangLoader.get("map.shop.arrows"));
+                        new ShopItem(Material.TNT, 5, 3).addToInv(newInvArr);
 
                         ItemStack poisArr = new ItemStack(Material.TIPPED_ARROW);
                         PotionMeta poisArrMeta = (PotionMeta)poisArr.getItemMeta();
@@ -121,7 +122,7 @@ public class ListenerShopActions implements Listener
                         player.openInventory(newInvArr);
                         break;
                     case POTION:
-                        Inventory newInvUti = Bukkit.createInventory(null, 45, "Utility");
+                        Inventory newInvUti = Bukkit.createInventory(null, 45, LangLoader.get("map.shop.utility"));
                         if(map.isCT(player))
                         {
                             new ShopItem(Material.IRON_HOE, 10, 3).setCustomName(Map.getCtColor() + "Defuser").addToInv(newInvUti);
@@ -150,106 +151,102 @@ public class ListenerShopActions implements Listener
         PlayerInventory playerInv = player.getInventory();
         Map map = Map.getMapForPlayer(player);
 
-        switch(inv.getName())
+        if(inv.getName().equals(LangLoader.get("map.shop.weapons")))
         {
-            case "Weapons":
-                if(event.getCurrentItem().getType() == Material.GOLD_INGOT)
+            if(event.getCurrentItem().getType() == Material.GOLD_INGOT)
+            {
+                player.openInventory(inv);
+            }
+            else if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
+            {
+                map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
+
+                ItemStack item = event.getCurrentItem();
+                ItemMeta meta = item.getItemMeta();
+                meta.setUnbreakable(true);
+                item.setItemMeta(meta);
+                playerInv.setItem(item.getType() == Material.BOW ? 1 : 0, item);
+                player.closeInventory();
+            }
+        }
+        else if(inv.getName().equals(LangLoader.get("map.shop.arrows")))
+        {
+            if(event.getCurrentItem().getType() == Material.GOLD_INGOT)
+            {
+                player.openInventory(inv);
+            }
+
+            else if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
+            {
+                map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
+                playerInv.setItem(2, event.getCurrentItem());
+
+                if(event.getCurrentItem().getType() == Material.TNT)
                 {
-                    player.openInventory(inv);
-                    break;
+                    playerInv.setItem(29, new ItemStack(Material.ARROW));
                 }
 
+                player.closeInventory();
+            }
+        }
+        if(inv.getName().equals(LangLoader.get("map.shop.utility")))
+        {
+            if(event.getCurrentItem().getType() == Material.GOLD_INGOT)
+            {
+                player.openInventory(inv);
+            }
+            else if(map.isCT(player))
+            {
                 if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
                 {
-                    map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
-
                     ItemStack item = event.getCurrentItem();
-                    ItemMeta meta = item.getItemMeta();
-                    meta.setUnbreakable(true);
-                    item.setItemMeta(meta);
-                    playerInv.setItem(item.getType() == Material.BOW ? 1 : 0, item);
-                    player.closeInventory();
-                }
-                break;
-            case "Arrows":
-                if(event.getCurrentItem().getType() == Material.GOLD_INGOT)
-                {
-                    player.openInventory(inv);
-                    break;
-                }
 
+                    if(item.getType() == Material.IRON_HOE)
+                    {
+                        if(playerInv.getItem(8) != null)
+                        {
+                            player.openInventory(inv);
+                            return;
+                        }
+
+                        map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
+                        playerInv.setItem(8, item);
+                        player.closeInventory();
+                    }
+                    else if(item.getType() == Material.IRON_CHESTPLATE)
+                    {
+                        if(player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) != null)
+                        {
+                            player.openInventory(inv);
+                            return;
+                        }
+
+                        map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20000000, 2, false, false));
+                        player.closeInventory();
+                    }
+                }
+            }
+            else
+            {
                 if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
                 {
-                    map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
-                    playerInv.setItem(2, event.getCurrentItem());
+                    ItemStack item = event.getCurrentItem();
 
-                    /*if(event.getCurrentItem().getType() == Material.TNT)
+                    if(item.getType() == Material.IRON_CHESTPLATE)
                     {
-                        playerInv.setItem(29, new ItemStack(Material.ARROW));
-                    }*/
-
-                    player.closeInventory();
-                }
-                break;
-            case "Utility":
-                if(event.getCurrentItem().getType() == Material.GOLD_INGOT)
-                {
-                    player.openInventory(inv);
-                    break;
-                }
-
-                if(map.isCT(player))
-                {
-                    if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
-                    {
-                        ItemStack item = event.getCurrentItem();
-
-                        if(item.getType() == Material.IRON_HOE)
+                        if(player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) != null)
                         {
-                            if(playerInv.getItem(8) != null)
-                            {
-                                player.openInventory(inv);
-                                return;
-                            }
-
-                            map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
-                            playerInv.setItem(8, item);
-                            player.closeInventory();
+                            player.openInventory(inv);
+                            return;
                         }
-                        else if(item.getType() == Material.IRON_CHESTPLATE)
-                        {
-                            if(player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) != null)
-                            {
-                                player.openInventory(inv);
-                                return;
-                            }
 
-                            map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20000000, 2, false, false));
-                            player.closeInventory();
-                        }
+                        map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20000000, 1, false, false));
+                        player.closeInventory();
                     }
                 }
-                else
-                {
-                    if(map.getMoney(player) >= inv.getItem(event.getSlot()+9).getAmount())
-                    {
-                        ItemStack item = event.getCurrentItem();
-
-                        if(item.getType() == Material.IRON_CHESTPLATE)
-                        {
-                            if(player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) != null)
-                            {
-                                player.openInventory(inv);
-                                return;
-                            }
-
-                            map.itemBought(player, inv.getItem(event.getSlot()+9).getAmount());
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20000000, 1, false, false));
-                            player.closeInventory();
-                        }
-                    }
-                }
+            }
         }
     }
 }

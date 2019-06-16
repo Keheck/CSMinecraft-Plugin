@@ -2,6 +2,7 @@ package io.github.keheck.csminecraft.listener;
 
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,7 @@ public class ListenerBombPlaced implements Listener
             Map map = Map.getMapForPlayer(placer);
 
             ItemStack item = event.getItemInHand();
-            boolean isBomb = item.getItemMeta().getDisplayName().equals(Map.getTColor() + "Bombe");
+            boolean isBomb = item.getItemMeta().getDisplayName().equals(Map.getTColor() + LangLoader.get("map.game.item.bomb"));
 
             if(map.isValidBombPlacement(event.getBlock().getLocation()) && isBomb)
             {
@@ -31,7 +32,7 @@ public class ListenerBombPlaced implements Listener
                     map.setPlanter(placer);
 
                     for(Player player : map.getTs())
-                        player.sendMessage(Map.getTColor() + "Ich platziere die Bombe!");
+                        player.sendMessage(Map.getTColor() + LangLoader.get("map.game.player.planting"));
                 }
                 else
                 {

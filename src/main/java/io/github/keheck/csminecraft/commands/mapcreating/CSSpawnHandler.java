@@ -4,6 +4,7 @@ import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
 import io.github.keheck.csminecraft.repeats.RepeatingBoundaryMarker;
 import io.github.keheck.csminecraft.util.Numeric;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -29,7 +30,7 @@ public class CSSpawnHandler extends CommandHandlerBase
     {
         if(!(sender instanceof Player))
         {
-            System.out.println(ChatColor.RED + "Sender muss ein Spieler sein!");
+            System.out.println(ChatColor.RED + LangLoader.get("command.error.wrong_sender"));
             return true;
         }
 
@@ -45,7 +46,7 @@ public class CSSpawnHandler extends CommandHandlerBase
                 Integer.parseInt(args[i]);
             }catch (NumberFormatException e)
             {
-                sender.sendMessage(ChatColor.RED + "Letzten 5 Argumente müssen Zahlen sein!");
+                sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.not_nums"));
                 return false;
             }
 
@@ -59,14 +60,14 @@ public class CSSpawnHandler extends CommandHandlerBase
                 case 4:
                     if(!Numeric.between(-29999985, j, 29999985))
                     {
-                        sender.sendMessage(ChatColor.RED + "X/Z Koordinaten müssen zwichen -29999984 und 29999984 liegen!");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.boundsxz"));
                         return true;
                     }
                     break;
                 case 5:
                     if(!Numeric.between(0, j, 256))
                     {
-                        sender.sendMessage(ChatColor.RED + "Y Koordinate muss zwischen 1 und 255 liegen!");
+                        sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.args.boundsy"));
                         return true;
                     }
                     break;
@@ -88,17 +89,17 @@ public class CSSpawnHandler extends CommandHandlerBase
                 if(BoundaryIndicators.TSpawnBounds.isCancelled())
                     BoundaryIndicators.TSpawnBounds = new RepeatingBoundaryMarker(plugin, Particle.CRIT_MAGIC, ((Player) sender).getWorld(), bounds);
                 else
-                    sender.sendMessage(ChatColor.RED + "T-Spawn muss erst zurückgesetzt werden!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.bounds.tspawn"));
                 break;
             case "ct":
                 if(BoundaryIndicators.CTSpawnBounds.isCancelled())
                     BoundaryIndicators.CTSpawnBounds = new RepeatingBoundaryMarker(plugin, Particle.WATER_SPLASH, ((Player) sender).getWorld(), bounds);
                 else
-                    sender.sendMessage(ChatColor.RED + "AT-Spawn muss erst zurückgesetzt werden!");
+                    sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.bounds.ctspawn"));
                 break;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Spawn erstellt!");
+        sender.sendMessage(ChatColor.GREEN + LangLoader.get("command.success.bounds"));
         return true;
     }
 }

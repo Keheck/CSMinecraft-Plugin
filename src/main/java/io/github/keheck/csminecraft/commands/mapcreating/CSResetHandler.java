@@ -3,6 +3,7 @@ package io.github.keheck.csminecraft.commands.mapcreating;
 import io.github.keheck.csminecraft.objectholder.MapCoordinateHolder;
 import io.github.keheck.csminecraft.commands.CommandHandlerBase;
 import io.github.keheck.csminecraft.objectholder.BoundaryIndicators;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -36,22 +37,27 @@ public class CSResetHandler extends CommandHandlerBase
             {
                 case "Bounds":
                     BoundaryIndicators.MapBounds.cancel();
+                    BoundaryIndicators.MapBounds = null;
                     Arrays.fill(MapCoordinateHolder.get("bounds"), 0);
                     break;
                 case "TSpawn":
                     BoundaryIndicators.TSpawnBounds.cancel();
+                    BoundaryIndicators.TSpawnBounds = null;
                     Arrays.fill(MapCoordinateHolder.get("TSpawn"), 0);
                     break;
                 case "CTSpawn":
                     BoundaryIndicators.CTSpawnBounds.cancel();
+                    BoundaryIndicators.CTSpawnBounds = null;
                     Arrays.fill(MapCoordinateHolder.get("CTSpawn"), 0);
                     break;
                 case "BombA":
                     BoundaryIndicators.BombA.cancel();
+                    BoundaryIndicators.BombA = null;
                     Arrays.fill(MapCoordinateHolder.get("bombA"), 0);
                     break;
                 case "BombB":
                     BoundaryIndicators.BombB.cancel();
+                    BoundaryIndicators.BombB = null;
                     Arrays.fill(MapCoordinateHolder.get("bombB"), 0);
                     break;
                 default:
@@ -60,11 +66,11 @@ public class CSResetHandler extends CommandHandlerBase
         }
         catch (IllegalStateException | NullPointerException ignored)
         {
-            sender.sendMessage(ChatColor.RED + "Boundary was already reset!");
+            sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.reset.already"));
             return true;
         }
 
-        sender.sendMessage(ChatColor.GREEN + args[0] + " has been reset!");
+        sender.sendMessage(ChatColor.GREEN + LangLoader.get("command.success.reset", args[0]));
         return true;
     }
 }

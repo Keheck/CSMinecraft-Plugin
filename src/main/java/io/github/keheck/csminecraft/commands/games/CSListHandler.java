@@ -3,6 +3,7 @@ package io.github.keheck.csminecraft.commands.games;
 import io.github.keheck.csminecraft.CSMinecraft;
 import io.github.keheck.csminecraft.Map;
 import io.github.keheck.csminecraft.commands.CommandHandlerBase;
+import io.github.keheck.csminecraft.util.loaders.LangLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,8 +29,8 @@ public class CSListHandler extends CommandHandlerBase
             {
                 Map map = CSMinecraft.MAPS.get(key);
                 sender.sendMessage(ChatColor.GREEN + key);
-                sender.sendMessage(ChatColor.RED + "Welt: " + map.getWorld().getName());
-                sender.sendMessage(ChatColor.GOLD + "Zentrum: " + map.getCenter());
+                sender.sendMessage(ChatColor.RED + map.getWorld().getName());
+                sender.sendMessage(ChatColor.GOLD + map.getCenter());
             }
         }
         else
@@ -39,12 +40,12 @@ public class CSListHandler extends CommandHandlerBase
             if(map != null)
             {
                 sender.sendMessage(ChatColor.GREEN + args[0]);
-                sender.sendMessage(ChatColor.RED + "Welt: " + map.getWorld().getName());
-                sender.sendMessage(ChatColor.GOLD + "Zentrum: " + map.getCenter());
+                sender.sendMessage(ChatColor.RED + map.getWorld().getName());
+                sender.sendMessage(ChatColor.GOLD + map.getCenter());
             }
             else
             {
-                sender.sendMessage("Konnte Map nicht finden!");
+                sender.sendMessage(ChatColor.RED + LangLoader.get("command.error.map.not_available"));
             }
         }
 
