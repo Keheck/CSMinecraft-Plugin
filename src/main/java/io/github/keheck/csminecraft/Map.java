@@ -1,8 +1,6 @@
 package io.github.keheck.csminecraft;
 
-import io.github.keheck.csminecraft.events.EventCTWin;
-import io.github.keheck.csminecraft.events.EventTWin;
-import io.github.keheck.csminecraft.events.GameStartEvent;
+import io.github.keheck.csminecraft.events.*;
 import io.github.keheck.csminecraft.repeats.RepeatBombWarning;
 import io.github.keheck.csminecraft.repeats.RepeatingCountdownVisual;
 import io.github.keheck.csminecraft.repeats.beepstages.RepeatingBeepStage;
@@ -40,6 +38,7 @@ public class Map
     private boolean warmup = true;
     private boolean gameDone = false;
     private boolean switched = false;
+    private boolean canPlayersMove = true;
 
     private ArrayList<Player> cts = new ArrayList<>();
     private ArrayList<Player> ts  = new ArrayList<>();
@@ -300,7 +299,7 @@ public class Map
             teleportPlayer();
         }
 
-        plugin.getServer().getPluginManager().callEvent(new GameStartEvent(this));
+        plugin.getServer().getPluginManager().callEvent(new EventGameStart(this));
         setupTimer(BarColor.YELLOW);
         setupRound();
     }
@@ -373,6 +372,7 @@ public class Map
             return;
         }
 
+        canPlayersMove = false;
         canBuy = true;
         inRound = false;
 
@@ -525,6 +525,7 @@ public class Map
 
     public void startCountdown()
     {
+        canPlayersMove = true;
         setupTimer(BarColor.GREEN);
 
         countdown = new TimerRoundCountdown(plugin, this);
@@ -729,4 +730,6 @@ public class Map
     public RepeatingCountdownVisual getVisual() { return visual; }
 
     public TimerRoundCountdown getCountdown() { return countdown; }
+
+    public boolean canPlayersMove() { return canPlayersMove; }
 }
