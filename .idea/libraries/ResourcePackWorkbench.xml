@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ResourcePackWorkbench">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Java/_Libraries/ResourcePackWorkbench.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
