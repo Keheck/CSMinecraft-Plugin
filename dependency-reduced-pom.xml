@@ -4,7 +4,7 @@
   <groupId>io.github.keheck</groupId>
   <artifactId>CSMinecraft</artifactId>
   <name>CSMinecraft</name>
-  <version>RELEASE-1.0.0</version>
+  <version>RELEASE-1.0.1</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>

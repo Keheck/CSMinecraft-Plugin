@@ -75,9 +75,27 @@ public class ListenerPlayerKilled implements Listener
             Map map = Map.getMapForPlayer(damager);
             Map map1 = Map.getMapForPlayer(player);
 
-            if(map == map1)
+            if(map == map1 && map.getDefuser() == player)
             {
                 map.setDefuser(null, null);
+            }
+        }
+    }
+
+    @EventHandler
+    public void planterDamaged(EntityDamageByEntityEvent event)
+    {
+        if(event.getDamager() instanceof Player && event.getEntity() instanceof Player)
+        {
+            Player damager = (Player)event.getDamager();
+            Player player = (Player)event.getEntity();
+
+            Map map = Map.getMapForPlayer(damager);
+            Map map1 = Map.getMapForPlayer(player);
+
+            if(map == map1 && map.getPlanter() == player)
+            {
+                map.setPlanter(null);
             }
         }
     }

@@ -17,6 +17,11 @@ public class CSHelpHandler extends CommandHandlerBase
 
         sender.sendMessage(ChatColor.AQUA + "==========CSMinecraft Commands==========");
 
+        if(args.length == 0)
+        {
+            args = new String[]{""};
+        }
+
         switch(args[0])
         {
             default:
@@ -38,8 +43,8 @@ public class CSHelpHandler extends CommandHandlerBase
                 sender.sendMessage(ChatColor.AQUA + "/csreload: " + ChatColor.GREEN + plugin.getCommand("csreload").getDescription());
         }
 
-        sender.sendMessage(ChatColor.YELLOW + "Legende: {}=Kann da sein, <>=Variable (braucht einen Wert), " +
-                "[]=Wähle einen aufgelisteten Wert");
+        sender.sendMessage(ChatColor.YELLOW + "Legend: {}=CAN be there, <>=Mandatory value, " +
+                "[]=needs to be one of the given values");
         return true;
     }
 }

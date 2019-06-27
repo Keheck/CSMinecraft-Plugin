@@ -6,7 +6,7 @@
 
     <groupId>io.github.keheck</groupId>
     <artifactId>CSMinecraft</artifactId>
-    <version>RELEASE-1.0.0</version>
+    <version>RELEASE-1.0.1</version>
     <packaging>jar</packaging>
 
     <name>CSMinecraft</name>
